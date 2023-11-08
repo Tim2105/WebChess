@@ -1,4 +1,3 @@
-import { get } from 'svelte/store';
 import createModule from './bin/module.js';
 
 /**
@@ -12,14 +11,15 @@ const exportedFunctions = {
     setBoard: chessModule.cwrap('setBoard', 'number', ['string']),
     getBoard: chessModule.cwrap('getBoard', 'string', []),
     getLegalMoves: chessModule.cwrap('getLegalMoves', 'string', []),
+    getGameStatus: chessModule.cwrap('getGameStatus', 'number', []),
     getBestMove: chessModule.cwrap('getBestMove', 'number', ['number']),
     makeMove: chessModule.cwrap('makeMove', 'number', ['number']),
     undoMove: chessModule.cwrap('undoMove', 'number', []),
     initAnalysis: chessModule.cwrap('initAnalysis', null, ['number', 'number']),
-    startAnalysis: chessModule.cwrap('startAnalysis', null, []),
-    stopAnalysis: chessModule.cwrap('stopAnalysis', null, []),
+    startAnalysis: chessModule.cwrap('startAnalysis', 'number', []),
+    stopAnalysis: chessModule.cwrap('stopAnalysis', 'number', []),
     getAnalysisData: chessModule.cwrap('getAnalysisData', 'string', []),
-    getError: chessModule.cwrap('getError', 'string', []),
+    getError: chessModule.cwrap('getError', 'string', [])
 }
 
 /**
@@ -282,6 +282,43 @@ export function strToLegalMove(moveString) {
 }
 
 /**
+ * @description Überprüft, ob das Spiel noch läuft.
+ * 
+ * @returns {boolean} Gibt an, ob das Spiel noch läuft.
+ */
+export function isGameOngoing() {
+    return exportedFunctions.getGameStatus() === 0;
+}
+
+/**
+ * @description Überprüft, ob das Spiel beendet ist.
+ * 
+ * @returns {boolean} Gibt an, ob das Spiel beendet ist.
+ */
+export function isGameOver() {
+    return exportedFunctions.getGameStatus() !== 0;
+}
+
+/**
+ * @description Überprüft, ob das Spiel durch Schachmatt beendet ist.
+ * 
+ * @returns {boolean} Gibt an, ob das Spiel durch Schachmatt beendet ist.
+ */
+export function isCheckmate() {
+    const status = exportedFunctions.getGameStatus();
+    return status === 1 || status === 2;
+}
+
+/**
+ * @description Überprüft, ob das Spiel unentschieden ist.
+ * 
+ * @returns {boolean} Gibt an, ob das Spiel unentschieden ist.
+ */
+export function isDraw() {
+    return exportedFunctions.getGameStatus() === 3;
+}
+
+/**
  * @description Fragt die Engine nach dem besten Zug.
  * 
  * @param {number} time Die Zeit, die die Engine in einem Spiel
@@ -350,12 +387,15 @@ export function startAnalysis(updateCallback) {
     const callbackPtr = chessModule.addFunction(callbackWrapper, 'v');
 
     // Initialisiere die Analyse.
-    exportedFunctions.initAnalysis(callbackPtr, 100);
+    exportedFunctions.initAnalysis(callbackPtr, 50);
 
     isAnalysisRunning = true;
 
     // Starte die Analyse.
-    exportedFunctions.startAnalysis();
+    if(!exportedFunctions.startAnalysis()) {
+        isAnalysisRunning = false;
+        throw new Error(exportedFunctions.getError());
+    }
 
     isAnalysisRunning = false;
 
@@ -370,5 +410,6 @@ export function stopAnalysis() {
     if(!isAnalysisRunning)
         return;
 
-    exportedFunctions.stopAnalysis();
+    if(!exportedFunctions.stopAnalysis())
+        throw new Error(exportedFunctions.getError());
 }
