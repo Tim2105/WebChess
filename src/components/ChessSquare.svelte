@@ -59,7 +59,9 @@
     /**
      * @description Wird aufgerufen, wenn das Feld angeklickt wird.
      */
-    function handleClick() {
+    function handleClick(event) {
+        event.stopPropagation();
+
         dispatch('click', {
             square: square
         });
@@ -86,7 +88,7 @@
 
 <div class="container">
     <button class="square {color} {isSelected ? 'selected' : ''}"
-            id = "square{square}" on:click={handleClick}
+            id = "square{square}" on:click|nonpassive={handleClick}
             on:mouseenter={focusElement} on:focus={handleFocus}
             on:focusout={handleDefocus}>
         {#if piece}
@@ -197,7 +199,7 @@
     }
 
     .black {
-        background-color: #553311;
+        background-color: #664422;
     }
 
 </style>
