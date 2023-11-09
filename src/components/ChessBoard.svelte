@@ -27,6 +27,7 @@
     export let lastMove = null;
 
     let selectedSquare = null;
+    let focussedSquare = null;
 
     $: legalDestFromSelectedSquare = legalMoves.filter(move => move.from === selectedSquare)
                                      .map(move => move.to);
@@ -51,6 +52,41 @@
         }
     }
 
+    function handleFocus(event) {
+        focussedSquare = event.detail.square;
+    }
+
+    function focusSquare(square) {
+        focussedSquare = square;
+        document.querySelector(`#square${square}`).focus();
+    }
+
+    function focusSquareBelow() {
+        focusSquare((focussedSquare - 8 + 64) % 64);
+    }
+
+    function focusSquareAbove() {
+        focusSquare((focussedSquare + 8) % 64);
+    }
+
+    function focusSquareLeft() {
+        const file = focussedSquare % 8;
+
+        if(file === 0)
+            focusSquare(focussedSquare + 7);
+        else
+            focusSquare(focussedSquare - 1);
+    }
+
+    function focusSquareRight() {
+        const file = focussedSquare % 8;
+
+        if(file === 7)
+            focusSquare(focussedSquare - 7);
+        else
+            focusSquare(focussedSquare + 1);
+    }
+
 </script>
 
 <div class="board">
@@ -62,10 +98,21 @@
                          isOrigOrDestOfLastMove={lastMove && (lastMove.from === (7 - rank) * 8 + file
                                                  || lastMove.to === (7 - rank) * 8 + file)}
                          isLegalDestination={legalDestFromSelectedSquare.includes((7 - rank) * 8 + file)}
-                         on:click={handleClick} />
+                         on:click={handleClick} on:focus={handleFocus} />
         {/each}
     {/each}
 </div>
+<svelte:window on:keydown={event => {
+    if(event.key === 'ArrowDown') {
+        focusSquareBelow();
+    } else if(event.key === 'ArrowUp') {
+        focusSquareAbove();
+    } else if(event.key === 'ArrowLeft') {
+        focusSquareLeft();
+    } else if(event.key === 'ArrowRight') {
+        focusSquareRight();
+    }
+}} />
 
 <style>
 

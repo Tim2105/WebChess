@@ -65,11 +65,30 @@
         });
     }
 
+    let isFocussed = false;
+
+    function handleFocus() {
+        isFocussed = true;
+        dispatch('focus', {
+            square: square
+        });
+    }
+
+    function handleDefocus() {
+        isFocussed = false;
+    }
+
+    function focusElement() {
+        document.querySelector(`#square${square}`).focus();
+    }
+
 </script>
 
 <div class="container">
     <button class="square {color} {isSelected ? 'selected' : ''}"
-            on:click={handleClick}>
+            id = "square{square}" on:click={handleClick}
+            on:mouseenter={focusElement} on:focus={handleFocus}
+            on:focusout={handleDefocus}>
         {#if piece}
             {#if piece === 'K'}
                 <img class="piece" src="/pieces/Chess_klt45.svg" alt="K" />
@@ -100,14 +119,13 @@
         {#if isLegalDestination}
             <img class="legalMoveDot" src="/LegalMoveDot.svg" alt="." />
         {/if}
+        <div class="lastMoveBorderContainer {isOrigOrDestOfLastMove ? 'lastMove' : ''}
+                    {isFocussed ? 'focussed' : ''}"/>
     </button>
-    <div class="lastMoveHighlightContainer {isOrigOrDestOfLastMove ? 'lastMove' : ''}" />
 </div>
 
 <style>
     .container {
-        position: relative;
-
         width: 100%;
         height: 100%;
     }
@@ -118,22 +136,6 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-
-        width: 100%;
-        height: 100%;
-
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-
-        border: none;
-    }
-
-    .lastMoveHighlightContainer {
-        position: absolute;
-        z-index: 0;
-        top: 0;
-        left: 0;
 
         width: 100%;
         height: 100%;
@@ -159,6 +161,20 @@
         width: 40%;
     }
 
+    .lastMoveBorderContainer {
+        position: absolute;
+        z-index: 3;
+
+        width: 100%;
+        height: 100%;
+
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+
+        border: none;
+    }
+
     .square:hover {
         cursor: pointer;
     }
@@ -167,8 +183,13 @@
         border: 3px solid black;
     }
 
-    .square:not(.lastMove):hover {
+    .square:hover, .square:focus {
+        outline: none;
         border: 3px solid black;
+    }
+
+    .lastMove:not(.selected):not(.focussed) {
+        border: 3px solid red;
     }
 
     .white {
@@ -177,10 +198,6 @@
 
     .black {
         background-color: #553311;
-    }
-
-    .lastMove {
-        border: 3px solid red;
     }
 
 </style>
