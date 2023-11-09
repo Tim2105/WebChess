@@ -1,10 +1,29 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import ChessBoard from '../components/ChessBoard.svelte';
     import * as Engine from '../scripts/wasm/Engine.js';
     import { fenToBoard } from '../scripts/Chess.js';
 
     const dispatch = createEventDispatcher();
+
+    let engineWorker = null;
+
+    onMount(() => {
+        engineWorker = new Worker('/src/scripts/WorkerScript.js', { type: 'module' });
+
+        engineWorker.onmessage = (msg) => {
+            msg = msg.data;
+
+            switch(msg.type) {
+                case 'move':
+                    handleEngineMove(msg.data);
+                    break;
+                case 'error':
+                    console.log(msg.data);
+                    break;
+            }
+        }
+    });
 
     let board = fenToBoard(Engine.getBoard());
 
@@ -14,18 +33,11 @@
 
     let isGameOver = false;
 
-    function handleMove(event) {
-        if(isGameOver)
-            return;
+    let isPlayerTurn = true;
 
-        const move = event.detail;
-        Engine.makeMove(move);
-
+    function updateState() {
         // Aktualisiere die Liste der legalen Züge
         legalMoves = Engine.getLegalMoves();
-
-        // Aktualisiere den letzten Zug
-        lastMove = move;
 
         // Aktualisiere das Schachbrett
         board = fenToBoard(Engine.getBoard());
@@ -43,8 +55,59 @@
 
             dispatch('gameover', { winner: 'none', reason: 'draw' });
         }
+
+        // Übergeben die aktuelle Position an den Engine-Worker
+        engineWorker.postMessage({
+            type: 'set',
+            data: Engine.getBoard()
+        });
+
+        isPlayerTurn = !isPlayerTurn;
     }
 
+    function nextMove() {
+        updateState();
+
+        if(isGameOver)
+            return;
+
+        if(isPlayerTurn)
+            return;
+        else {
+            engineWorker.postMessage({
+                type: 'move',
+                data: 6000
+            });
+        }
+    }
+
+    function handleUserMove(event) {
+        const move = event.detail;
+
+        try {
+            Engine.makeMove(move);
+
+            // Speichere den letzten Zug
+            lastMove = move;
+
+            nextMove();
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    function handleEngineMove(move) {
+        try {
+            Engine.makeMove(move);
+
+            // Speichere den letzten Zug
+            lastMove = move;
+
+            updateState();
+        } catch(error) {
+            console.log(error);
+        }
+    }
 </script>
 
-<ChessBoard board={board} legalMoves={legalMoves} lastMove={lastMove} on:move={handleMove} />
+<ChessBoard board={board} acceptInput={isPlayerTurn} legalMoves={legalMoves} lastMove={lastMove} on:move={handleUserMove} />
