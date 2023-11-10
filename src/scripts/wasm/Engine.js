@@ -12,7 +12,9 @@ const exportedFunctions = {
     getBoard: chessModule.cwrap('getBoard', 'string', []),
     getLegalMoves: chessModule.cwrap('getLegalMoves', 'string', []),
     getGameStatus: chessModule.cwrap('getGameStatus', 'number', []),
+    initPlayEngine: chessModule.cwrap('initPlayEngine', null, []),
     getBestMove: chessModule.cwrap('getBestMove', 'number', ['number']),
+    getBestMoveInStaticTime: chessModule.cwrap('getBestMoveInStaticTime', 'number', ['number']),
     makeMove: chessModule.cwrap('makeMove', 'number', ['number']),
     undoMove: chessModule.cwrap('undoMove', 'number', []),
     initAnalysis: chessModule.cwrap('initAnalysis', null, ['number', 'number']),
@@ -315,7 +317,30 @@ export function isCheckmate() {
  * @returns {boolean} Gibt an, ob das Spiel unentschieden ist.
  */
 export function isDraw() {
+    return exportedFunctions.getGameStatus() >= 3;
+}
+
+export function isDrawByStalemate() {
     return exportedFunctions.getGameStatus() === 3;
+}
+
+export function isDrawByFiftyMoveRule() {
+    return exportedFunctions.getGameStatus() === 4;
+}
+
+export function isDrawByThreefoldRepetition() {
+    return exportedFunctions.getGameStatus() === 5;
+}
+
+export function isDrawByInsufficientMaterial() {
+    return exportedFunctions.getGameStatus() === 6;
+}
+
+/**
+ * Initialisiert die Spiel-Engine.
+ */
+export function initPlayEngine() {
+    exportedFunctions.initPlayEngine();
 }
 
 /**
@@ -329,6 +354,16 @@ export function isDraw() {
  */
 export function getBestMove(time) {
     return new Move(exportedFunctions.getBestMove(time));
+}
+
+/**
+ * @description Fragt die Engine nach dem besten Zug.
+ * 
+ * @param {number} time Die Zeit, die die Engine für die Suche
+ * verwenden soll (in ms).
+ */
+export function getBestMoveInStaticTime(time) {
+    return new Move(exportedFunctions.getBestMoveInStaticTime(time));
 }
 
 /**

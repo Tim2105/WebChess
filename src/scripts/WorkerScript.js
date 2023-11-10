@@ -1,27 +1,63 @@
-import * as Engine from '/src/scripts/wasm/Engine.js';
+const EngineScript = import('/src/scripts/wasm/Engine.js');
+let Engine = null;
 
-onmessage = (msg) => {
-    msg = msg.data;
+EngineScript.then((object) => {
+    Engine = object;
+    Engine.initPlayEngine();
 
-    if(msg.type === 'set') {
-        try {
-            Engine.setBoard(msg.data);
+    self.postMessage({
+        type: 'ready'
+    });
+});
 
-            self.postMessage({
-                type: 'set',
-                data: msg.data
-            });
-        } catch(e) {
-            self.postMessage({
-                type: 'error',
-                data: e.message
-            });
-        }
-    } else if(msg.type === 'move') {
-        const move = Engine.getBestMove(msg.data);
+function handleSet(fen) {
+    try {
+        Engine.setBoard(fen);
+
+        self.postMessage({
+            type: 'set',
+            data: fen
+        });
+    } catch(e) {
+        self.postMessage({
+            type: 'error',
+            data: e.message
+        });
+    }
+}
+
+function handleMove(move) {
+    try {
+        Engine.makeMove(move);
+
         self.postMessage({
             type: 'move',
             data: move
         });
+    } catch(e) {
+        self.postMessage({
+            type: 'error',
+            data: e.message
+        });
     }
+}
+
+function handleSearch(time) {
+    const move = Engine.getBestMove(time);
+
+    self.postMessage({
+        type: 'search',
+        data: move
+    });
+}
+
+onmessage = (msg) => {
+    msg = msg.data;
+
+    if(msg.type === 'set')
+        handleSet(msg.data);
+    else if(msg.type === 'move')
+        handleMove(msg.data);
+    else if(msg.type === 'search')
+        handleSearch(msg.data);
 }
