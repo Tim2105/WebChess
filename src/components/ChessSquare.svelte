@@ -65,11 +65,15 @@
         dispatch('click', {
             square: square
         });
+
+        // Ein Touch-Click auf ein Feld soll den Fokus nicht setzen
+        if(event.pointerType === 'touch')
+            document.querySelector(`#square${square}`).blur();
     }
 
     let isFocussed = false;
 
-    function handleFocus() {
+    function handleFocus(event) {
         isFocussed = true;
         dispatch('focus', {
             square: square
@@ -78,6 +82,20 @@
 
     function handleDefocus() {
         isFocussed = false;
+    }
+
+    let isHovered = false;
+
+    function handleHover() {
+        isHovered = true;
+    }
+
+    function handleMouseOut() {
+        isHovered = false;
+
+        // Wenn die Maus das Spielbrett verlässt (also kein neuer Fokus gesetzt wird),
+        // soll der Fokus nicht mehr auf einem Feld liegen
+        document.querySelector(`#square${square}`).blur();
     }
 
     function focusElement() {
@@ -90,7 +108,8 @@
     <button class="square {color} {isSelected ? 'selected' : ''}"
             id = "square{square}" on:click|nonpassive={handleClick}
             on:mouseenter={focusElement} on:focus={handleFocus}
-            on:focusout={handleDefocus}>
+            on:focusout={handleDefocus} on:mouseover={handleHover}
+            on:mouseleave={handleMouseOut}>
         {#if piece}
             {#if piece === 'K'}
                 <img class="piece" src="/pieces/Chess_klt45.svg" alt="K" />
@@ -122,7 +141,7 @@
             <img class="legalMoveDot" src="/LegalMoveDot.svg" alt="." />
         {/if}
         <div class="lastMoveBorderContainer {isOrigOrDestOfLastMove ? 'lastMove' : ''}
-                    {isFocussed ? 'focussed' : ''}"/>
+                    {isFocussed ? 'focussed' : ''} {isHovered ? 'hovered' : ''}">
     </button>
 </div>
 
@@ -185,12 +204,14 @@
         border: 3px solid black;
     }
 
-    .square:hover, .square:focus {
-        outline: none;
-        border: 3px solid black;
+    @media (pointer: fine) {
+        .square:hover, .square:focus {
+            outline: none;
+            border: 3px solid black;
+        }
     }
 
-    .lastMove:not(.selected):not(.focussed) {
+    .lastMove:not(.selected):not(.focussed, .hovered) {
         border: 3px solid red;
     }
 

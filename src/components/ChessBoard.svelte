@@ -186,35 +186,55 @@
 
 </script>
 
-<div class="board">
-    {#each {length: 8} as _, rank}
-        {#each {length: 8} as _, file}
-            <ChessSquare square={(7 - rank) * 8 + file}
-                         piece={board.pieces[(7 - rank) * 8 + file]}
-                         isSelected={selectedSquare === (7 - rank) * 8 + file}
-                         isOrigOrDestOfLastMove={lastMove && (lastMove.from === (7 - rank) * 8 + file
-                                                 || lastMove.to === (7 - rank) * 8 + file)}
-                         isLegalDestination={acceptInput && 
-                                             legalDestFromSelectedSquare.includes((7 - rank) * 8 + file)}
-                         on:click={handleClick} on:focus={handleFocus} />
+<div class="boardContainer">
+    <div class="board">
+        {#each {length: 8} as _, rank}
+            {#each {length: 8} as _, file}
+                <ChessSquare square={(7 - rank) * 8 + file}
+                            piece={board.pieces[(7 - rank) * 8 + file]}
+                            isSelected={selectedSquare === (7 - rank) * 8 + file}
+                            isOrigOrDestOfLastMove={lastMove && (lastMove.from === (7 - rank) * 8 + file
+                                                    || lastMove.to === (7 - rank) * 8 + file)}
+                            isLegalDestination={acceptInput && 
+                                                legalDestFromSelectedSquare.includes((7 - rank) * 8 + file)}
+                            on:click={handleClick} on:focus={handleFocus} />
+            {/each}
         {/each}
-    {/each}
-    {#if showPromotionDialog}
-        <div class="promoDialogContainer">
-            <div class="promoDialog">
-                <PromotionDialog color={board.turn === 'w' ? 'white' : 'black'}
-                                on:promote={handlePromotion} />
+        {#if showPromotionDialog}
+            <div class="promoDialogContainer">
+                <div class="promoDialog">
+                    <PromotionDialog color={board.turn === 'w' ? 'white' : 'black'}
+                                    on:promote={handlePromotion} />
+                </div>
             </div>
-        </div>
-    {/if}
+        {/if}
+    </div>
 </div>
 <svelte:window on:keydown={handleKeydown}
                on:click={handleClickOutside} />
 
 <style>
 
-    .board {
+    .boardContainer {
         position: relative;
+    }
+
+    @media (orientation: landscape) {
+        .boardContainer {
+            height: 100%;
+            padding-right: 100%;
+        }
+    }
+
+    @media (orientation: portrait) {
+        .boardContainer {
+            width: 100%;
+            padding-bottom: 100%;
+        }
+    }
+
+    .board {
+        position: absolute;
 
         display: grid;
         grid-template-columns: repeat(8, 1fr);

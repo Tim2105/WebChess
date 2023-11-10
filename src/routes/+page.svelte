@@ -1,10 +1,11 @@
 <script>
     import ChessGame from '../components/ChessGame.svelte';
-
 </script>
 
 <div class="container">
-    <ChessGame />
+    <ChessGame whitePlayer="user" blackPlayer="engine"
+               whiteFullTime={1000000} blackFullTime={10000}
+               on:gameover={e => console.log(e.detail)} />
 </div>
 
 <style>
@@ -21,8 +22,8 @@
     }
 
     .container {
-        width: 600px;
-        height: 600px;
+        width: 100%;
+        height: 100%;
     }
 
 </style>
