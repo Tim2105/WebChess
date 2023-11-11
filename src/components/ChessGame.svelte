@@ -28,15 +28,6 @@
     let isWorkerReady = false;
 
     onMount(() => {
-        // Setze/Aktualisiere die CSS-Variable '--height' auf die Höhe des Fensters
-        // um die Dimensionen des Schachbretts im Landscape-Modus anzupassen
-        function setHeight() {
-            document.documentElement.style.setProperty('--height', `${window.innerHeight}px`);
-        }
-
-        window.addEventListener('resize', setHeight);
-        setHeight();
-
         engineWorker = new Worker('/src/scripts/WorkerScript.js');
 
         engineWorker.onmessage = (msg) => {
@@ -280,6 +271,7 @@
         height: 100%;
 
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
 
@@ -291,39 +283,56 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        aspect-ratio: 1/1;
     }
 
     @media (orientation: landscape) {
         .container {
-            flex-direction: row;
+            flex-wrap: wrap;
+
+            gap: 5%;
         }
 
         .board {
-            width: calc(var(--height) * 0.98);
-            height: 98%;
+            height: 99%;
+
+            margin-left: auto;
+
+            order: 1;
         }
 
-        .blackClock {
-            margin: 0 auto;
-        }
+        .clock {
+            margin: 0;
+            margin-right: auto;
 
-        .whiteClock {
-            margin: 0 auto;
+            order: 2;
         }
     }
 
-    @media (orientation: landscape) and (max-aspect-ratio: 8/5) {
+    @media (orientation: landscape) and (max-aspect-ratio: 7/5) {
+        .container {
+            display: grid;
+            grid-template-columns: 75% 25%;
+            grid-template-rows: auto auto;
+        }
+
         .board {
-            width: calc(var(--height) * 0.75);
             height: 75%;
+
+            grid-row: 1 / 3;
+        }
+
+        .blackClock {
+            margin-top: auto;
+        }
+
+        .whiteClock {
+            margin-bottom: auto;
         }
     }
 
     @media (orientation: portrait) {
-        .container {
-            flex-direction: column;
-        }
-
         .board {
             width: 100%;
         }

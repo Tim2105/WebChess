@@ -214,28 +214,12 @@
                on:click={handleClickOutside} />
 
 <style>
-
     .boardContainer {
-        position: relative;
-    }
-
-    @media (orientation: landscape) {
-        .boardContainer {
-            height: 100%;
-            padding-right: 100%;
-        }
-    }
-
-    @media (orientation: portrait) {
-        .boardContainer {
-            width: 100%;
-            padding-bottom: 100%;
-        }
+        width: 100%;
+        height: 100%;
     }
 
     .board {
-        position: absolute;
-
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);

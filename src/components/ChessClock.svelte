@@ -81,7 +81,7 @@
         gap: 0;
     }
 
-    @media (orientation: landscape) and (min-aspect-ratio: 9/8) {
+    @media (orientation: landscape) {
         .color {
             font-size: min(3em, 3vw);
         }
@@ -92,16 +92,6 @@
 
         .time div {
             width: min(2em, 2vw);
-        }
-    }
-
-    @media (orientation: landscape) and (max-aspect-ratio: 9/8) {
-        .time {
-            font-size: min(3em, 3vh);
-        }
-
-        .time div {
-            width: min(1.5em, 1.5vh);
         }
     }
 
