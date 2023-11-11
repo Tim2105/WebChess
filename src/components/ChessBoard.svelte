@@ -220,6 +220,8 @@
     }
 
     .board {
+        position: relative;
+
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
@@ -241,9 +243,9 @@
 
     .promoDialog {
         width: 100%;
-        height: 25%;
+        aspect-ratio: 4/1;
 
-        z-index: 3;
+        z-index: 4;
     }
 
 </style>

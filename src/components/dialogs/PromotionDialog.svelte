@@ -132,7 +132,7 @@
 
     .piece img {
         width: 80%;
-        height: 80%;
+        aspect-ratio: 1/1;
     }
 
 
