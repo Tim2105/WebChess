@@ -245,12 +245,24 @@
         applyMove(move);
     }
 
+    function updateWhiteTime(event) {
+        whiteFullTime = event.detail.time;
+        whiteTime = event.detail.time;
+    }
+
+    function updateBlackTime(event) {
+        blackFullTime = event.detail.time;
+        blackTime = event.detail.time;
+    }
+
 </script>
 
 <div class="container">
 
     <div class="clock blackClock">
-        <ChessClock time={blackTime} color="black" />
+        <ChessClock time={blackTime} color="black"
+                    editable={!(whiteStarted || blackStarted)}
+                    on:update={updateBlackTime} />
     </div>
 
     <div class="board">
@@ -260,7 +272,9 @@
     </div>
 
     <div class="clock whiteClock">
-        <ChessClock time={whiteTime} color="white" />
+        <ChessClock time={whiteTime} color="white"
+                    editable={!(whiteStarted || blackStarted)}
+                    on:update={updateWhiteTime} />
     </div>
 
 </div>

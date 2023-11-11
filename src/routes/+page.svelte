@@ -3,8 +3,8 @@
 </script>
 
 <div class="container">
-    <ChessGame whitePlayer="user" blackPlayer="engine"
-               whiteFullTime={1000000} blackFullTime={10000}
+    <ChessGame whitePlayer="user" blackPlayer="user"
+               whiteFullTime={300000} blackFullTime={300000}
                on:gameover={e => console.log(e.detail)} />
 </div>
 
