@@ -69,7 +69,7 @@
 
         -webkit-tap-highlight-color: transparent;
 
-        background-color: #d9e9f9;
+        background-color: #ebf5ff;
     }
 
     :global(.dialog) {

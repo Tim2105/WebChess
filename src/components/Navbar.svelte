@@ -56,8 +56,9 @@
     </div>
 
     <div class="option" id="optionLocale">
-        <button on:click={toggleSupportedLanguages}>
+        <button on:click={toggleSupportedLanguages} class="activeLanguage">
             <img src={activeLocaleFlag} alt={activeLocale} class="flag" />
+            <img src="/icons/ExpandIcon.svg" alt="Expand" class="flagExpander" />
         </button>
 
         {#if showSupportedLanguages}
@@ -128,6 +129,12 @@
 
     #optionLocale button img {
         aspect-ratio: 3/2;
+    }
+
+    .activeLanguage {
+        display: flex;
+
+        gap: 0.4em;
     }
 
     @keyframes slideInX {
@@ -213,6 +220,24 @@
         #optionLocale button:not(:first-child) {
             animation: slideInX 0.2s ease-out,
                        fadeIn 0.3s ease-out;
+
+            padding: 0.5em 0;
+        }
+
+        #optionLocale button:not(:first-child, :last-child) {
+            padding-left: 1em;
+        }
+
+        #optionLocale .activeLanguage {
+            flex-direction: row-reverse;
+            justify-content: center;
+            align-items: center;
+
+            padding-left: 0;
+        }
+
+        .flagExpander {
+            rotate: 90deg;
         }
     }
 
@@ -231,7 +256,7 @@
         }
 
         .expander img {
-            height: 7vh;
+            height: 6vh;
         }
 
         @keyframes containerSlideIn {
@@ -256,7 +281,7 @@
             top: 0;
             left: 0;
 
-            padding-top: 9vh;
+            padding-top: 8vh;
 
             flex-direction: column;
             justify-content: space-between;
@@ -299,10 +324,28 @@
         #optionLocale button:not(:first-child) {
             animation: slideInY 0.2s ease-out,
                        fadeIn 0.25s ease-out;
+
+            padding: 0 0.5em;
         }
 
         #optionLocale button img {
             width: min(100%, 4em);
+        }
+
+        #optionLocale button:not(:first-child, :last-child) {
+            padding-top: 1em;
+        }
+
+        #optionLocale .activeLanguage {
+            flex-direction: column-reverse;
+            justify-content: center;
+            align-items: center;
+
+            padding-top: 0;
+        }
+
+        .flagExpander {
+            rotate: 180deg;
         }
     }
 

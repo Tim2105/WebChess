@@ -3,9 +3,13 @@ export const supportedLanguages = {
         name: 'English',
         flag: '/flags/flag_en.svg'
     },
-    ger: {
+    de: {
         name: 'Deutsch',
-        flag: '/flags/flag_ger.svg'
+        flag: '/flags/flag_de.svg'
+    },
+    fr: {
+        name: 'Français',
+        flag: '/flags/flag_fr.svg'
     }
 };
 
@@ -62,7 +66,7 @@ export const translations = {
         'msg.drawByFiftyMoveRule': 'Draw by fifty move rule',
         'msg.drawByInsufficientMaterial': 'Draw by insufficient material',
     },
-    ger: {
+    de: {
         'app.title': 'WebChess',
         'app.description': 'Web App zum Schach spielen und analysieren',
         'game.white': 'Weiss',
@@ -78,5 +82,22 @@ export const translations = {
         'msg.drawByThreefoldRepetition': 'Remis durch dreifache Stellungswiederholung',
         'msg.drawByFiftyMoveRule': 'Remis durch die 50-Züge-Regel',
         'msg.drawByInsufficientMaterial': 'Remis durch unzureichendes Material',
+    },
+    fr: {
+        'app.title': 'WebChess',
+        'app.description': 'Application Web pour jouer et analyser aux échecs',
+        'game.white': 'Blanc',
+        'game.black': 'Noir',
+        'prompt.newGame': 'Nouvelle partie',
+        'msg.close': 'Fermer',
+        'msg.gameOver': 'Partie terminée',
+        'msg.whiteWinsByCheckmate': 'Les blancs gagnent par échec et mat',
+        'msg.blackWinsByCheckmate': 'Les noirs gagnent par échec et mat',
+        'msg.whiteWinsByTimeout': 'Les blancs gagnent par dépassement de temps',
+        'msg.blackWinsByTimeout': 'Les noirs gagnent par dépassement de temps',
+        'msg.drawByStalemate': 'Partie nulle par pat',
+        'msg.drawByThreefoldRepetition': 'Partie nulle par triple répétition de position',
+        'msg.drawByFiftyMoveRule': 'Partie nulle par la règle des 50 coups',
+        'msg.drawByInsufficientMaterial': 'Partie nulle par matériel insuffisant',
     }
 };
