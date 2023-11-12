@@ -106,15 +106,6 @@
             width: 100%;
             height: min(10%, 3rem);
         }
-
-        /*
-        * Reduziere die Gesamthöhe der Seite um 3px,
-        * weil wir sonst aus irgendwelchen Gründen
-        * vertikalen Overflow haben.
-        */
-        .page {
-            height: calc(100% - 3px);
-        }
     }
 
     @media (orientation: portrait) {

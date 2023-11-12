@@ -81,8 +81,8 @@
                     dispatch('move', move);
                     selectedSquare = null;
                 } else {
-                    // Wähle das Feld aus, wenn es das Ausgangsfeld eines legalen Zuges ist
-                    if(legalMoves.some(move => move.from === square))
+                    // Wähle das Feld aus, wenn eine Figur darauf steht
+                    if(board.pieces[square])
                         selectedSquare = square;
                 }
             }
@@ -94,7 +94,7 @@
     }
 
     function handleKeydown(event) {
-        if(showPromotionDialog || !acceptInput)
+        if(showPromotionDialog)
             return;
 
         if(event.key === 'ArrowDown')
@@ -231,6 +231,8 @@
     .boardContainer {
         width: 100%;
         height: 100%;
+
+        overflow: hidden;
     }
 
     .board {

@@ -165,10 +165,9 @@
 
     .digitContainer button {
         width: 1.75rem;
-        width: min(1.75rem, 8cqw);
-        width: 1.75rem;
-        height: min(1.75rem, 8cqw);
+        width: min(1.75rem, 10cqw);
         height: 1.75rem;
+        height: min(1.75rem, 10cqw);
         padding: 0;
         margin: 0 0.2rem;
         border: 2px solid transparent;
@@ -178,8 +177,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
-        padding: 5px;
     }
 
     .digitContainer button:hover {

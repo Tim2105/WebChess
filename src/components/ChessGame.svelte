@@ -394,7 +394,7 @@
         }
 
         .board {
-            height: 99%;
+            height: 100%;
 
             margin-left: auto;
 
@@ -463,7 +463,7 @@
         }
     }
 
-    @media (orientation: portrait) and (min-aspect-ratio: 4/5) {
+    @media (orientation: portrait) and (min-aspect-ratio: 3/4) {
         .floatingButtonContainer {
             bottom: 0;
             right: 0;

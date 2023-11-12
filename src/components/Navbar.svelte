@@ -21,8 +21,30 @@
 
     let showSupportedLanguages = false;
 
-    function toggleSupportedLanguages() {
+    function handleLanguageClick(event) {
+        // Ignoriere das Event, wenn es von einem Maus-Click ausgelöst wurde
+
+        if(event.pointerType === 'mouse')
+            return;
+
         showSupportedLanguages = !showSupportedLanguages;
+    }
+
+    function showSupportedLanguagesOnMouseEnter(event) {
+        // Ignoriere das Event, wenn es von einem Touchscreen ausgelöst wurde
+        // Ein Touch-Click auf ein Feld löst nämlich auch ein Mouse-Enter-Event aus
+        if(event.sourceCapabilities.firesTouchEvents)
+            return;
+        
+        showSupportedLanguages = true;
+    }
+
+    function hideSupportedLanguagesOnMouseLeave(event) {
+        // Ignoriere das Event, wenn es von einem Touchscreen ausgelöst wurde
+        if(event.sourceCapabilities.firesTouchEvents)
+            return;
+
+        showSupportedLanguages = false;
     }
 
     function setLanguage(lang) {
@@ -57,8 +79,11 @@
         </button>
     </div>
 
-    <div class="option" id="optionLocale">
-        <button on:click={toggleSupportedLanguages} class="activeLanguage">
+    <div class="option" id="optionLocale" role="list"
+         on:mouseleave={hideSupportedLanguagesOnMouseLeave}>
+        <button class="activeLanguage"
+                on:click={handleLanguageClick}
+                on:mouseenter={showSupportedLanguagesOnMouseEnter}>
             <img src={activeLocaleFlag} alt={activeLocale} class="flag" />
             <img src="/icons/ExpandIcon.svg" alt="Expand" class="flagExpander" />
         </button>
@@ -175,6 +200,8 @@
         }
 
         nav {
+            container-type: inline-size;
+
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -334,7 +361,8 @@
         }
 
         #optionLocale button img {
-            width: min(100%, 4em);
+            width: min(90%, 6rem);
+            width: min(90%, 12.5cqh);
         }
 
         #optionLocale button:not(:first-child, :last-child) {
