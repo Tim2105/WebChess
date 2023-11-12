@@ -142,7 +142,7 @@
         padding: 1rem;
 
         font-family: 'Seven Segment', sans-serif;
-        font-size: 6em;
+        font-size: 6rem;
 
         background-color: lightgray;
         border: 1px solid black;
@@ -157,10 +157,10 @@
     }
 
     .digitContainer button {
-        width: fit-content;
-        height: fit-content;
+        width: 1.75rem;
+        height: 1.75rem;
         padding: 0;
-        margin: 0.8em 0;
+        margin: 0 0.2rem;
         border: 2px solid transparent;
         border-radius: 5px;
         background-color: transparent;
@@ -182,8 +182,8 @@
     }
 
     img {
-        width: 1.75em;
-        height: 1.75em;
+        width: 100%;
+        height: 100%;
     }
 
     .digit {

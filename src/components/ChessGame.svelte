@@ -84,15 +84,16 @@
             return;
         }
 
-        if(fen) {
-            Engine.setBoard(fen);
+        if(!fen)
+            fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
-            if(engineWorker) {
-                engineWorker.postMessage({
-                    type: 'set',
-                    data: fen
-                });
-            }
+        Engine.setBoard(fen);
+
+        if(engineWorker) {
+            engineWorker.postMessage({
+                type: 'set',
+                data: fen
+            });
         }
 
         if(timerInterval)

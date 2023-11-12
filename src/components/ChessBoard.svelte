@@ -245,7 +245,7 @@
         width: 100%;
         aspect-ratio: 4/1;
 
-        z-index: 4;
+        z-index: 5;
     }
 
 </style>

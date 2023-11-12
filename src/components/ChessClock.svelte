@@ -3,6 +3,8 @@
 
     import ClockEditDialog from './dialogs/ClockEditDialog.svelte';
 
+    import * as Locale from '/src/scripts/locale/Locale.js'
+
     const dispatch = createEventDispatcher();
 
     export let time;
@@ -49,11 +51,17 @@
             showEditDialog = false;
     }
 
+    let colorText = Locale.getTranslation('game.' + color);
+
+    Locale.addChangeListener((lang) => {
+        colorText = Locale.getTranslation('game.' + color);
+    });
+
 </script>
 
 <div class="clock">
     <div class="color">
-        {color}
+        {colorText}
     </div>
     <div class="time">
         {#if time >= 10000}
@@ -226,7 +234,7 @@
         justify-content: center;
         align-items: center;
 
-        z-index: 4;
+        z-index: 5;
     }
 
 </style>

@@ -211,8 +211,21 @@
         }
     }
 
-    .lastMove:not(.selected):not(.focussed, .hovered) {
-        border: 3px solid red;
+    /*
+    * Clicks auf einem Touchscreen hovern das Feld.
+    * Damit das Zielfeld eines Zuges aber hervorgehoben wird,
+    * muss das Hover-Kriterium entfernt werden.
+    */
+   @media (pointer: coarse) {
+        .lastMove:not(.selected):not(.focussed) {
+            border: 3px solid red;
+        }
+    }
+
+    @media not (pointer: coarse) {
+        .lastMove:not(.selected):not(.hovered, .focussed) {
+            border: 3px solid red;
+        }
     }
 
     .white {
