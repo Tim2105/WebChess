@@ -56,7 +56,7 @@
 
 </script>
 
-<div class="container">
+<div class="container dialog">
 
     <div class="firstHourDigit digitContainer">
         <button on:click={e => addHours(e, 10)}>

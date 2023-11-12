@@ -65,7 +65,7 @@
 </script>
 
 <div class="container">
-    <button class="piece" id="promoBtnQ"
+    <button class="piece dialog noanimation" id="promoBtnQ"
             on:click={handleQueenPromotion}
             on:focus={handleFocus('q')}>
         {#if color === 'white'}
@@ -74,7 +74,7 @@
             <img src="/pieces/Chess_qdt45.svg" alt="q" />
         {/if}
     </button>
-    <button class="piece" id="promoBtnR"
+    <button class="piece dialog noanimation" id="promoBtnR"
             on:click={handleRookPromotion}
             on:focus={handleFocus('r')}>
         {#if color === 'white'}
@@ -83,7 +83,7 @@
             <img src="/pieces/Chess_rdt45.svg" alt="r" />
         {/if}
     </button>
-    <button class="piece" id="promoBtnB"
+    <button class="piece dialog noanimation" id="promoBtnB"
             on:click={handleBishopPromotion}
             on:focus={handleFocus('b')}>
         {#if color === 'white'}
@@ -92,7 +92,7 @@
             <img src="/pieces/Chess_bdt45.svg" alt="b" />
         {/if}
     </button>
-    <button class="piece" id="promoBtnN"
+    <button class="piece dialog noanimation" id="promoBtnN"
             on:click={handleKnightPromotion}
             on:focus={handleFocus('n')}>
         {#if color === 'white'}
@@ -120,12 +120,28 @@
         width: 100%;
         height: 100%;
 
-        border: 3px dashed black;
+        border: 2px solid black;
+    }
+
+    @keyframes buttonHover {
+        from {
+            background-image: none;
+            background-size: 100% 0;
+        }
+
+        to {
+            background-image: linear-gradient(to top,
+                                              transparent, transparent 50%,
+                                            #48a9fe 50%, #0beef9 100%);
+            background-size: 100% 200%;
+        }
     }
 
     .piece:hover, .piece:focus {
         outline: none;
-        border: 3px solid black;
+
+        animation: buttonHover 0.2s ease-out;
+        animation-fill-mode: forwards;
 
         cursor: pointer;
     }

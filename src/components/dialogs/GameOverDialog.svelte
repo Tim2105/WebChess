@@ -48,7 +48,7 @@
 
 </script>
 
-<div class="container">
+<div class="container dialog">
     <div class="gameOver">
         {gameOverMsg}
     </div>
@@ -102,7 +102,7 @@
         margin: 0.8em 0;
         border: 2px solid black;
         border-radius: 5px;
-        background-color: lightgray;
+        background-color: transparent;
 
         display: flex;
         justify-content: center;
@@ -111,9 +111,46 @@
         padding: 0.5em 1em;
     }
 
+    @keyframes buttonHover {
+        from {
+            background-image: none;
+            background-size: 0 100%;
+        }
+
+        to {
+            background-image: linear-gradient(to left,
+                                              transparent, transparent 50%,
+                                            #48a9fe 50%, #0beef9 100%);
+            background-size: 200% 100%;
+        }
+    }
+
     button:hover {
+        animation: buttonHover 0.2s ease-out;
+        animation-fill-mode: forwards;
+
         cursor: pointer;
-        background-color: gray;
+    }
+
+    @keyframes buttonFocus {
+        from {
+            background-image: none;
+            background-size: 0 100%;
+        }
+
+        to {
+            background-image: linear-gradient(to left,
+                                              transparent, transparent 50%,
+                                            #85c6ff 50%, #71f6fd 100%);
+            background-size: 200% 100%;
+        }
+    }
+
+    button:focus:not(:hover) {
+        animation: buttonFocus 0.2s ease-out;
+        animation-fill-mode: forwards;
+
+        outline: none;
     }
 
 </style>

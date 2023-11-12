@@ -201,13 +201,13 @@
     }
 
     .square.selected {
-        border: 3px solid black;
+        border: 2px solid black;
     }
 
     @media (pointer: fine) {
         .square:hover, .square:focus {
             outline: none;
-            border: 3px solid black;
+            border: 2px solid black;
         }
     }
 
@@ -218,13 +218,13 @@
     */
    @media (pointer: coarse) {
         .lastMove:not(.selected):not(.focussed) {
-            border: 3px solid red;
+            border: 2px solid rgba(10, 10, 255, 0.85);
         }
     }
 
     @media not (pointer: coarse) {
         .lastMove:not(.selected):not(.hovered, .focussed) {
-            border: 3px solid red;
+            border: 2px solid rgba(10, 10, 255, 0.85);
         }
     }
 
@@ -233,7 +233,7 @@
     }
 
     .black {
-        background-color: #664422;
+        background-color: #775533;
     }
 
 </style>

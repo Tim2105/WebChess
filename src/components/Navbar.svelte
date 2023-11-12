@@ -80,8 +80,6 @@
         width: 100%;
         height: 100%;
 
-        background-color: lightgray;
-
         z-index: 4;
     }
 
@@ -89,11 +87,32 @@
         width: fit-content;
     }
 
+    @keyframes buttonHover {
+        from {
+            background-image: none;
+            background-size: 0 100%;
+        }
+
+        to {
+            background-image: linear-gradient(to left,
+                                              transparent, transparent 50%,
+                                            #48a9fe 50%, #0beef9 100%);
+            background-size: 200% 100%;
+        }
+    }
+
     .option button:hover {
-        background-color: gray;
+        animation: buttonHover 0.15s ease-out -0.05s;
+        animation-fill-mode: forwards;
 
         cursor: pointer;
+    }
 
+    .option button:focus {
+        animation: buttonHover 0.2s ease-out;
+        animation-fill-mode: forwards;
+
+        cursor: pointer;
     }
 
     #optionLocale button {
@@ -101,6 +120,7 @@
 
         background: none;
         border: none;
+        animation: none;
 
         display: flex;
         justify-content: center;
@@ -108,6 +128,36 @@
 
     #optionLocale button img {
         aspect-ratio: 3/2;
+    }
+
+    @keyframes slideInX {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInY {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     @media (orientation: landscape) {
@@ -120,9 +170,10 @@
             flex-direction: row;
             justify-content: space-between;
 
-            border-radius: 0 0 5px 5px;
+            background-color: #5ca0f2;
+            background-image: linear-gradient(to left, #5ca0f2 0%, #f5f7f6 74%);
 
-            border-bottom: 1px solid black;
+            border-radius: 0 0 5px 5px;
         }
 
         .option {
@@ -136,8 +187,8 @@
 
             border-top: none;
             border-bottom: none;
-            border-left: 2px solid black;
-            border-right: 2px solid black;
+            border-left: 2px solid darkgray;
+            border-right: 2px solid darkgray;
 
             padding: 0.5em 1em;
             margin: 0;
@@ -158,6 +209,11 @@
         #optionLocale button img {
             height: 100%;
         }
+
+        #optionLocale button:not(:first-child) {
+            animation: slideInX 0.2s ease-out,
+                       fadeIn 0.3s ease-out;
+        }
     }
 
     @media (orientation: portrait) {
@@ -166,6 +222,8 @@
             top: 0;
             left: 0;
 
+            padding: 1vh;
+
             background: none;
             border: none;
 
@@ -173,17 +231,32 @@
         }
 
         .expander img {
-            height: 6vh;
+            height: 7vh;
+        }
+
+        @keyframes containerSlideIn {
+            from {
+                height: 0;
+            }
+
+            to {
+                height: 100%;
+            }
         }
 
         nav {
             display: none;
 
+            background-color: #5ca0f2;
+            background-image: linear-gradient(to top, #5ca0f2 0%, #f5f7f6 74%);
+
+            animation: containerSlideIn 0.3s ease-out;
+
             position: absolute;
             top: 0;
             left: 0;
 
-            padding-top: 6vh;
+            padding-top: 9vh;
 
             flex-direction: column;
             justify-content: space-between;
@@ -191,11 +264,11 @@
             box-sizing: border-box;
 
             border-radius: 0 5px 5px 0;
-
-            border-right: 1px solid black;
         }
 
         .option {
+            animation: fadeIn 0.5s ease-in;
+
             width: 100%;
         }
 
@@ -204,8 +277,8 @@
             height: fit-content;
             background: none;
 
-            border-top: 2px solid black;
-            border-bottom: 2px solid black;
+            border-top: 2px solid darkgray;
+            border-bottom: 2px solid darkgray;
             border-left: none;
             border-right: none;
 
@@ -221,6 +294,11 @@
             display: flex;
             flex-direction: column-reverse;
             justify-content: flex-end;
+        }
+
+        #optionLocale button:not(:first-child) {
+            animation: slideInY 0.2s ease-out,
+                       fadeIn 0.25s ease-out;
         }
 
         #optionLocale button img {

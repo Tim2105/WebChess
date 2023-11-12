@@ -44,7 +44,7 @@
     </div>
 
     <main class="container">
-        <ChessGame whitePlayer="user" blackPlayer="engine"
+        <ChessGame whitePlayer="user" blackPlayer="user"
                 whiteFullTime={300000} blackFullTime={300000}
                 on:gameover={handleGameOver} bind:this={gameComponent} />
 
@@ -66,6 +66,30 @@
         height: 100%;
         margin: 0;
         padding: 0;
+
+        -webkit-tap-highlight-color: transparent;
+
+        background-color: #d9e9f9;
+    }
+
+    :global(.dialog) {
+        background-color: #afcbed;
+        background-image: linear-gradient(to top, #afcbed 0%, #f5f7f6 74%);
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    :global(.dialog:not(.noanimation)) {
+        animation: slideUp 0.2s ease-out;
     }
 
     .page {
