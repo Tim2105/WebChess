@@ -25,7 +25,7 @@
         winner = null;
         reason = null;
 
-        gameComponent.startGame();
+        gameComponent.setup();
     }
 
     function handleClickOutside(event) {
@@ -44,8 +44,7 @@
     </div>
 
     <main class="container">
-        <ChessGame whitePlayer="user" blackPlayer="user"
-                whiteFullTime={300000} blackFullTime={300000}
+        <ChessGame whiteFullTime={300000} blackFullTime={300000}
                 on:gameover={handleGameOver} bind:this={gameComponent} />
 
         {#if showGameOverDialog}
@@ -153,6 +152,45 @@
         align-items: center;
 
         z-index: 5;
+    }
+
+    :global(.floatingButton) {
+        width: min(5rem, 15vw, 15vh);
+        height: min(5rem, 15vw, 15vh);
+
+        margin: min(0.5rem, 1vw);
+
+        border: none;
+        border-radius: 50%;
+
+        background: #f0f0f0;
+        box-shadow: 3px 3px 15px 4px rgba(0,0,0,0.8);
+
+        cursor: pointer;
+    }
+
+    @keyframes buttonActive {
+        from {}
+
+        to {
+            box-shadow: 1px 1px 3px 2px rgba(100,100,100,0.8);
+        }
+    }
+
+    @media (hover: hover) {
+        :global(.floatingButton:hover) {
+            box-shadow: 3px 3px 15px 4px rgba(100,100,100,0.8);
+        }
+    }
+
+    :global(.floatingButton:active) {
+        animation: buttonActive 0.04s ease-out;
+        animation-fill-mode: forwards;
+    }
+
+    :global(.floatingButton img) {
+        width: 100%;
+        height: 100%;
     }
 
 </style>

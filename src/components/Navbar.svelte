@@ -44,9 +44,11 @@
 
 </script>
 
-<button class="expander" on:click={toggleNavbar}>
-    <img src="/icons/MenuIcon.svg" alt="Expand" />
-</button>
+<div class="expander">
+    <button class="floatingButton" on:click={toggleNavbar}>
+        <img src="/icons/MenuIcon.svg" alt="Expand" oncontextmenu="return false;"/>
+    </button>
+</div>
 
 <nav class="container">
     <div class="option">
@@ -249,6 +251,8 @@
 
             padding: 1vh;
 
+            height: 6vh;
+
             background: none;
             border: none;
 
@@ -256,7 +260,8 @@
         }
 
         .expander img {
-            height: 6vh;
+            width: 75%;
+            height: 75%;
         }
 
         @keyframes containerSlideIn {
@@ -281,7 +286,7 @@
             top: 0;
             left: 0;
 
-            padding-top: 8vh;
+            padding-top: 12vh;
 
             flex-direction: column;
             justify-content: space-between;

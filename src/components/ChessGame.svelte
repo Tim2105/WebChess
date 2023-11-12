@@ -18,8 +18,31 @@
         });
     }
 
-    export let whitePlayer;
-    export let blackPlayer;
+    let whitePlayer = 'user';
+    let blackPlayer = 'engine';
+
+    let flipBoard = false;
+
+    function flip() {
+        flipBoard = !flipBoard;
+
+        // Tausche die Spieler
+        let temp = whitePlayer;
+        whitePlayer = blackPlayer;
+        blackPlayer = temp;
+
+        // Tausche die Eingabefunktionen der Spieler
+        temp = waitForWhitePlayer;
+        waitForWhitePlayer = waitForBlackPlayer;
+        waitForBlackPlayer = temp;
+
+        waitingForUserInput = false;
+
+        if(board.turn === 'w' && whitePlayer === 'user')
+            waitForWhitePlayer(whiteTime);
+        else if(board.turn === 'b' && blackPlayer === 'user')
+            waitForBlackPlayer(blackTime);
+    }
 
     $: waitForWhitePlayer = whitePlayer === 'user' ? waitforUserMove : waitForEngineMove;
     $: waitForBlackPlayer = blackPlayer === 'user' ? waitforUserMove : waitForEngineMove;
@@ -41,12 +64,12 @@
                     isWorkerReady = true;
                     break;
                 case 'error':
-                    console.log(msg.data);
+                    console.error(msg.data);
                     break;
             }
         }
 
-        startGame();
+        setup();
     });
 
     onDestroy(() => {
@@ -63,6 +86,7 @@
 
     let lastMove = null;
 
+    let started = false;
     let isGameOver = false;
 
     let waitingForUserInput = false;
@@ -75,17 +99,17 @@
     let blackStarted = false;
 
     let timerInterval = null;
-    let lastTimestamp = 0;
+    let lastTimestamp = null;
 
-    export function startGame(fen) {
+    export function setup(fen) {
         // Warte, bis die Engine bereit ist
         if(!isWorkerReady) {
-            setTimeout(() => startGame(fen), 100);
+            setTimeout(() => setup(fen), 100);
             return;
         }
 
         if(!fen)
-            fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+            fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
         Engine.setBoard(fen);
 
@@ -105,9 +129,21 @@
 
         whiteTime = whiteFullTime;
         blackTime = blackFullTime;
+        lastTimestamp = null;
 
+        started = false;
         whiteStarted = false;
         blackStarted = false;
+
+        updateState(null);
+
+        if(board.turn === 'w' && whitePlayer === 'user')
+            waitForWhitePlayer(null);
+        else if(board.turn === 'b' && blackPlayer === 'user')
+            waitForBlackPlayer(null);
+    }
+
+    function startGame() {
         nextMove(null);
     }
 
@@ -155,7 +191,7 @@
         // Lösche den Timer (falls vorhanden)
         // und aktualisiere die Zeit des Spielers,
         // der gerade am Zug war
-        if(timerInterval) {
+        if(timerInterval && lastTimestamp) {
             const now = performance.now();
 
             // Inkrementiere die Zeit des Spielers um 10ms, der gerade am Zug war
@@ -172,10 +208,19 @@
     }
 
     function nextMove(lastPlayedMove) {
+        started = true;
+        waitingForUserInput = false;
+
         updateState(lastPlayedMove);
 
-        if(isGameOver)
+        if(isGameOver) {
+            // Beende den Timer,
+            // falls das Spiel vorbei ist
+            if(timerInterval)
+                clearInterval(timerInterval);
+
             return;
+        }
 
         // Warte auf den nächsten Zug
         if(board.turn === 'w') {
@@ -193,7 +238,8 @@
                         dispatch('gameover', { winner: 'black', reason: 'timeout' });
                     }
                 }, 100);
-            }
+            } else
+                lastTimestamp = null;
 
             waitForWhitePlayer(whiteTime);
         } else {
@@ -211,7 +257,8 @@
                         dispatch('gameover', { winner: 'white', reason: 'timeout' });
                     }
                 }, 100);
-            }
+            } else
+                lastTimestamp = null;
 
             waitForBlackPlayer(blackTime);
         }
@@ -233,9 +280,7 @@
                 blackStarted = true;
 
             nextMove(move);
-        } catch(error) {
-            console.log(error);
-        }
+        } catch(error) {}
     }
 
     function handleUserMove(event) {
@@ -260,28 +305,56 @@
 
 <div class="container">
 
-    <div class="clock blackClock">
-        <ChessClock time={blackTime} color="black"
-                    editable={!(whiteStarted || blackStarted)}
-                    on:update={updateBlackTime} />
-    </div>
+    {#if !started}
+        <div class="floatingButtonContainer">
+            <button class="floatingButton" on:click={startGame}>
+                <img src="/icons/PlayIcon.svg" alt="Start" draggable="false" oncontextmenu="return false;" />
+            </button>
+            <button class="floatingButton" on:click={flip}>
+                <img src="/icons/FlipIcon.svg" alt="Flip" draggable="false" oncontextmenu="return false;" />
+            </button>
+        </div>
+    {/if}
+
+    {#if !flipBoard}
+        <div class="clock blackClock">
+            <ChessClock time={blackTime} color="black"
+                        editable={!started}
+                        on:update={updateBlackTime} />
+        </div>
+
+        <div class="clock whiteClock">
+            <ChessClock time={whiteTime} color="white"
+                        editable={!started}
+                        on:update={updateWhiteTime} />
+        </div>
+    {:else}
+        <div class="clock blackClock">
+            <ChessClock time={whiteTime} color="white"
+                        editable={!started}
+                        on:update={updateWhiteTime} />
+        </div>
+
+        <div class="clock whiteClock">
+            <ChessClock time={blackTime} color="black"
+                        editable={!started}
+                        on:update={updateBlackTime} />
+        </div>
+    {/if}
 
     <div class="board">
-        <ChessBoard board={board} acceptInput={waitingForUserInput && !isGameOver}
+        <ChessBoard board={board} flipBoard={flipBoard}
+                    acceptInput={waitingForUserInput && !isGameOver}
                     legalMoves={legalMoves} lastMove={lastMove}
                     on:move={handleUserMove} />
-    </div>
-
-    <div class="clock whiteClock">
-        <ChessClock time={whiteTime} color="white"
-                    editable={!(whiteStarted || blackStarted)}
-                    on:update={updateWhiteTime} />
     </div>
 
 </div>
 
 <style>
     .container {
+        position: relative;
+
         width: 100%;
         height: 100%;
 
@@ -302,11 +375,22 @@
         aspect-ratio: 1/1;
     }
 
+    .floatingButtonContainer {
+        position: absolute;
+        right: max(0.5rem, 1vw);
+
+        z-index: 5;
+    }
+
     @media (orientation: landscape) {
         .container {
             flex-wrap: wrap;
 
             gap: 5%;
+        }
+
+        .floatingButtonContainer {
+            top: max(0.5rem, 1vw);
         }
 
         .board {
@@ -350,20 +434,44 @@
     @media (orientation: portrait) {
         .board {
             width: 100%;
+            order: 2;
+        }
+
+        .floatingButtonContainer {
+            bottom: max(0.5rem, 1vw);
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 0.25rem;
         }
 
         .blackClock {
             margin: auto 0;
+            order: 1;
         }
 
         .whiteClock {
             margin: auto 0;
+            order: 3;
         }
     }
 
     @media (orientation: portrait) and (min-aspect-ratio: 5/6) {
         .board {
             width: 80%;
+        }
+    }
+
+    @media (orientation: portrait) and (min-aspect-ratio: 4/5) {
+        .floatingButtonContainer {
+            bottom: 0;
+            right: 0;
+
+            display: flex;
+            flex-direction: row;
+
+            gap: 0.25rem;
         }
     }
 

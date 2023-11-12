@@ -83,7 +83,7 @@
         {#if editable}
             <div class="edit">
                 <button on:click={() => showEditDialog = true}>
-                    <img src="/icons/EditIcon.svg" alt="Edit" />
+                    <img src="/icons/EditIcon.svg" alt="Edit" draggable="false" oncontextmenu="return false;" />
                 </button>
             </div>
         {/if}
@@ -192,7 +192,7 @@
         }
 
         .edit button {
-            height: min(5em, 5vw);
+            height: min(5em, 6vw);
         }
 
         .time div {
@@ -214,7 +214,7 @@
         }
 
         .edit button {
-            height: min(5em, 5vh);
+            height: min(5em, 6vh);
         }
 
         .time div {

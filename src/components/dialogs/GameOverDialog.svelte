@@ -132,25 +132,4 @@
         cursor: pointer;
     }
 
-    @keyframes buttonFocus {
-        from {
-            background-image: none;
-            background-size: 0 100%;
-        }
-
-        to {
-            background-image: linear-gradient(to left,
-                                              transparent, transparent 50%,
-                                            #85c6ff 50%, #71f6fd 100%);
-            background-size: 200% 100%;
-        }
-    }
-
-    button:focus:not(:hover) {
-        animation: buttonFocus 0.2s ease-out;
-        animation-fill-mode: forwards;
-
-        outline: none;
-    }
-
 </style>

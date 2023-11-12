@@ -112,29 +112,41 @@
             on:mouseleave={handleMouseOut}>
         {#if piece}
             {#if piece === 'K'}
-                <img class="piece" src="/pieces/Chess_klt45.svg" alt="K" />
+                <img class="piece" src="/pieces/Chess_klt45.svg" alt="K"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'Q'}
-                <img class="piece" src="/pieces/Chess_qlt45.svg" alt="Q" />
+                <img class="piece" src="/pieces/Chess_qlt45.svg" alt="Q"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'R'}
-                <img class="piece" src="/pieces/Chess_rlt45.svg" alt="R" />
+                <img class="piece" src="/pieces/Chess_rlt45.svg" alt="R"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'B'}
-                <img class="piece" src="/pieces/Chess_blt45.svg" alt="B" />
+                <img class="piece" src="/pieces/Chess_blt45.svg" alt="B"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'N'}
-                <img class="piece" src="/pieces/Chess_nlt45.svg" alt="N" />
+                <img class="piece" src="/pieces/Chess_nlt45.svg" alt="N"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'P'}
-                <img class="piece" src="/pieces/Chess_plt45.svg" alt="P" />
+                <img class="piece" src="/pieces/Chess_plt45.svg" alt="P"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'k'}
-                <img class="piece" src="/pieces/Chess_kdt45.svg" alt="k" />
+                <img class="piece" src="/pieces/Chess_kdt45.svg" alt="k"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'q'}
-                <img class="piece" src="/pieces/Chess_qdt45.svg" alt="q" />
+                <img class="piece" src="/pieces/Chess_qdt45.svg" alt="q"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'r'}
-                <img class="piece" src="/pieces/Chess_rdt45.svg" alt="r" />
+                <img class="piece" src="/pieces/Chess_rdt45.svg" alt="r"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'b'}
-                <img class="piece" src="/pieces/Chess_bdt45.svg" alt="b" />
+                <img class="piece" src="/pieces/Chess_bdt45.svg" alt="b"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'n'}
-                <img class="piece" src="/pieces/Chess_ndt45.svg" alt="n" />
+                <img class="piece" src="/pieces/Chess_ndt45.svg" alt="n"
+                    draggable="false" oncontextmenu="return false;" />
             {:else if piece === 'p'}
-                <img class="piece" src="/pieces/Chess_pdt45.svg" alt="p" />
+                <img class="piece" src="/pieces/Chess_pdt45.svg" alt="p"
+                    draggable="false" oncontextmenu="return false;" />
             {/if}
         {/if}
         {#if isLegalDestination}

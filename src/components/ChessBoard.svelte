@@ -4,6 +4,7 @@
     import ChessSquare from './ChessSquare.svelte';
     import PromotionDialog from './dialogs/PromotionDialog.svelte';
     import { Board } from '../scripts/Chess.js';
+  import { flip } from 'svelte/animate';
 
     const dispatch = createEventDispatcher();
 
@@ -19,6 +20,19 @@
      * @type {boolean}
      */
     export let acceptInput = true;
+
+    /**
+     * @description Ob das Schachbrett gedreht werden soll.
+     * @type {boolean}
+     */
+    export let flipBoard = false;
+
+    $: rankFileToSquare = (rank, file) => {
+        if(!flipBoard)
+            return (7 - rank) * 8 + file;
+        else
+            return rank * 8 + (7 - file);
+    }
 
     /**
      * @description Die Liste der legalen Züge.
@@ -190,13 +204,13 @@
     <div class="board">
         {#each {length: 8} as _, rank}
             {#each {length: 8} as _, file}
-                <ChessSquare square={(7 - rank) * 8 + file}
-                            piece={board.pieces[(7 - rank) * 8 + file]}
-                            isSelected={selectedSquare === (7 - rank) * 8 + file}
-                            isOrigOrDestOfLastMove={lastMove && (lastMove.from === (7 - rank) * 8 + file
-                                                    || lastMove.to === (7 - rank) * 8 + file)}
+                <ChessSquare square={rankFileToSquare(rank, file)}
+                            piece={board.pieces[rankFileToSquare(rank, file)]}
+                            isSelected={selectedSquare === rankFileToSquare(rank, file)}
+                            isOrigOrDestOfLastMove={lastMove && (lastMove.from === rankFileToSquare(rank, file)
+                                                    || lastMove.to === rankFileToSquare(rank, file))}
                             isLegalDestination={acceptInput && 
-                                                legalDestFromSelectedSquare.includes((7 - rank) * 8 + file)}
+                                                legalDestFromSelectedSquare.includes(rankFileToSquare(rank, file))}
                             on:click={handleClick} on:focus={handleFocus} />
             {/each}
         {/each}
