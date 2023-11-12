@@ -131,6 +131,8 @@
     }
 
     .container {
+        container-type: inline-size;
+
         width: min(90%, 400px);
 
         display: flex;
@@ -154,10 +156,18 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        width: 3rem;
+        width: min(3rem, 12cqw);
+
+        font-size: min(6rem, 24cqw);
     }
 
     .digitContainer button {
         width: 1.75rem;
+        width: min(1.75rem, 8cqw);
+        width: 1.75rem;
+        height: min(1.75rem, 8cqw);
         height: 1.75rem;
         padding: 0;
         margin: 0 0.2rem;
@@ -187,12 +197,11 @@
     }
 
     .digit {
-        width: 3rem;
+        width: 100%;
         text-align: end;
     }
 
     .colon {
-        width: 3rem;
         text-align: center;
     }
 
