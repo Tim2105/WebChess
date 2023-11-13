@@ -29,7 +29,7 @@
      * @description Die Farbe des Feldes.
      * @type {string}
      */
-    const color = (rank + file) % 2 === 0 ? "white" : "black";
+    const color = (rank + file) % 2 === 0 ? "black" : "white";
 
     /**
      * @description Die Figur auf dem Feld als String
