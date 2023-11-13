@@ -3,6 +3,7 @@
     import ChessBoard from '../components/ChessBoard.svelte';
     import ChessClock from './ChessClock.svelte';
     import * as Engine from '../scripts/wasm/Engine.js';
+    import ChessWorker from '../scripts/WorkerScript.js?worker';
     import { fenToBoard } from '../scripts/Chess.js';
 
     const dispatch = createEventDispatcher();
@@ -51,7 +52,7 @@
     let isWorkerReady = false;
 
     onMount(() => {
-        engineWorker = new Worker('/src/scripts/WorkerScript.js');
+        engineWorker = new ChessWorker();
 
         engineWorker.onmessage = (msg) => {
             msg = msg.data;
@@ -67,7 +68,7 @@
                     console.error(msg.data);
                     break;
             }
-        }
+        };
 
         setup();
     });
@@ -80,9 +81,9 @@
             clearInterval(timerInterval);
     });
 
-    let board = fenToBoard(Engine.getBoard());
+    let board = fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-    let legalMoves = Engine.getLegalMoves();
+    let legalMoves = [];
 
     let lastMove = null;
 

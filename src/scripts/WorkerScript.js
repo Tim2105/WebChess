@@ -1,13 +1,20 @@
-const EngineScript = import('/src/scripts/wasm/Engine.js');
-let Engine = null;
+// const EngineScript = import('/src/scripts/wasm/Engine.js');
+// let Engine = null;
 
-EngineScript.then((object) => {
-    Engine = object;
-    Engine.initPlayEngine();
+// EngineScript.then((object) => {
+//     Engine = object;
+//     Engine.initPlayEngine();
 
-    self.postMessage({
-        type: 'ready'
-    });
+//     self.postMessage({
+//         type: 'ready'
+//     });
+// });
+
+import * as Engine from './wasm/Engine.js';
+Engine.initPlayEngine();
+
+self.postMessage({
+    type: 'ready'
 });
 
 function handleSet(fen) {

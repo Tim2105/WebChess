@@ -8,10 +8,18 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
+		"@rollup/plugin-wasm": "^6.2.2",
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
+		"esbuild": "^0.19.5",
+		"esbuild-svelte": "^0.8.0",
+		"fast-glob": "^3.3.2",
+		"glob": "^10.3.10",
 		"svelte": "^4.0.5",
-		"vite": "^4.4.2"
+		"vite": "^4.4.2",
+		"vite-plugin-static-copy": "^0.17.0",
+		"vite-plugin-wasm": "^3.2.2"
 	},
 	"type": "module"
 }
