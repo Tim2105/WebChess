@@ -28,6 +28,38 @@ export class Board {
         this.fiftyMoveRule = fiftyMoveRule;
         this.fullMove = fullMove;
     }
+
+    /**
+     * @description Gibt das Schachbrett als FEN-String zurück.
+     * 
+     * @returns {string} FEN-String
+     */
+    toFen() {
+        let fen = '';
+        for(let row = 7; row >= 0; row--) {
+            let empty = 0;
+            for(let col = 0; col < 8; col++) {
+                const piece = this.pieces[row * 8 + col];
+                if(piece === '') {
+                    empty++;
+                } else {
+                    if(empty > 0) {
+                        fen += empty;
+                        empty = 0;
+                    }
+                    fen += piece;
+                }
+            }
+            if(empty > 0) {
+                fen += empty;
+            }
+            if(row > 0) {
+                fen += '/';
+            }
+        }
+        fen += ` ${this.turn} ${this.castling} ${this.enPassant} ${this.fiftyMoveRule} ${this.fullMove}`;
+        return fen;
+    }
 }
 
 /**

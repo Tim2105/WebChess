@@ -1,5 +1,6 @@
 <script>
     import Navbar from '../components/Navbar.svelte';
+    import ChessAnalysis from '../components/ChessAnalysis.svelte';
     import ChessGame from '../components/ChessGame.svelte';
     import GameOverDialog from '../components/dialogs/GameOverDialog.svelte';
 
@@ -44,7 +45,7 @@
     </div>
 
     <main class="container">
-        <ChessGame whiteFullTime={300000} blackFullTime={300000}
+        <!-- <ChessGame whiteFullTime={300000} blackFullTime={300000}
                 on:gameover={handleGameOver} bind:this={gameComponent} />
 
         {#if showGameOverDialog}
@@ -52,7 +53,9 @@
                 <GameOverDialog winner={winner} reason={reason}
                                 on:close={closeGameOverDialog} />
             </div>
-        {/if}
+        {/if} -->
+
+        <ChessAnalysis />
     </main>
 </div>
 

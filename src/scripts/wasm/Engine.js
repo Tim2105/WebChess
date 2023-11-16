@@ -21,7 +21,8 @@ const exportedFunctions = {
     startAnalysis: chessModule.cwrap('startAnalysis', 'number', []),
     stopAnalysis: chessModule.cwrap('stopAnalysis', 'number', []),
     getAnalysisData: chessModule.cwrap('getAnalysisData', 'string', []),
-    getError: chessModule.cwrap('getError', 'string', [])
+    getError: chessModule.cwrap('getError', 'string', []),
+    moveToFigurineNotation: chessModule.cwrap('moveToFigurineNotation', 'string', ['number']),
 }
 
 /**
@@ -140,7 +141,7 @@ class Move {
  * @property {Array<Move>} moves Die Züge der Variation.
  * @property {number} score Die Bewertung der Variation.
  */
-class Variation {
+export class Variation {
     /**
      * @description Erstellt ein neues Variation-Objekt.
      * 
@@ -151,12 +152,29 @@ class Variation {
         this.moves = moves;
         this.score = score;
     }
+
+    /**
+     * @description Gibt die Variation als JSON-Objekt zurück.
+     */
+    toJSON() {
+        return {
+            moves: this.moves.map(move => move.bits),
+            score: this.score
+        };
+    }
+
+    /**
+     * @description Erstellt eine Variation aus einem JSON-Objekt.
+     */
+    static fromJSON(json) {
+        return new Variation(json.moves.map(move => new Move(move)), json.score);
+    }
 }
 
 /**
  * @description Eine Klasse, die die Daten einer Analyse kapselt.
  */
-class AnalysisData {
+export class AnalysisData {
     /**
      * @description Erstellt ein neues AnalysisData-Objekt.
      * 
@@ -170,6 +188,26 @@ class AnalysisData {
         this.nodes = nodes;
         this.time = time;
         this.variations = variations;
+    }
+
+    /**
+     * @description Gibt die Analyse als JSON-Objekt zurück.
+    */
+    toJSON() {
+        return {
+            depth: this.depth,
+            nodes: this.nodes,
+            time: this.time,
+            variations: this.variations.map(variation => variation.toJSON())
+        };
+    }
+
+    /**
+     * @description Erstellt eine Analyse aus einem JSON-Objekt.
+     */
+    static fromJSON(json) {
+        return new AnalysisData(json.depth, json.nodes, json.time,
+                                json.variations.map(variation => Variation.fromJSON(variation)));
     }
 }
 
@@ -411,18 +449,13 @@ export function startAnalysis(updateCallback) {
             variations.push(new Variation(variation.moves.map(move => new Move(move)), variation.score));
 
         updateCallback(new AnalysisData(data.depth, data.nodes, data.time, variations));
-
-        // Die Analyse blockiert den Hauptthread, daher muss
-        // hier dem Browser die Möglichkeit gegeben werden,
-        // andere Events abzuarbeiten.
-        await new Promise(resolve => setTimeout(resolve, 0));
     }
 
     // Füge die Callback-Funktion in die WebAssembly-Tabelle ein.
     const callbackPtr = chessModule.addFunction(callbackWrapper, 'v');
 
     // Initialisiere die Analyse.
-    exportedFunctions.initAnalysis(callbackPtr, 50);
+    exportedFunctions.initAnalysis(callbackPtr, 250);
 
     isAnalysisRunning = true;
 
@@ -447,4 +480,16 @@ export function stopAnalysis() {
 
     if(!exportedFunctions.stopAnalysis())
         throw new Error(exportedFunctions.getError());
+}
+
+/**
+ * @description Wandelt die interne Repräsentation eines Zuges
+ * in die Standard-Figurinen-Notation um.
+ * 
+ * @param {number} move Die interne Repräsentation des Zuges.
+ * 
+ * @returns {string} Der Zug in Figurinen-Notation.
+ */
+export function moveToFigurineNotation(move) {
+    return exportedFunctions.moveToFigurineNotation(move.bits);
 }

@@ -1,21 +1,28 @@
-// const EngineScript = import('/src/scripts/wasm/Engine.js');
-// let Engine = null;
-
-// EngineScript.then((object) => {
-//     Engine = object;
-//     Engine.initPlayEngine();
-
-//     self.postMessage({
-//         type: 'ready'
-//     });
-// });
-
 import * as Engine from './wasm/Engine.js';
-Engine.initPlayEngine();
 
-self.postMessage({
-    type: 'ready'
-});
+function handleInitPlay() {
+    Engine.initPlayEngine();
+}
+
+function handleStartAnalysis() {
+    try {
+        Engine.startAnalysis((analysis) => {
+            self.postMessage({
+                type: 'analysis',
+                data: JSON.stringify(analysis)
+            });
+        });
+    } catch(e) {
+        self.postMessage({
+            type: 'error',
+            data: e.message
+        });
+    }
+}
+
+function handleStopAnalysis() {
+    Engine.stopAnalysis();
+}
 
 function handleSet(fen) {
     try {
@@ -67,4 +74,14 @@ onmessage = (msg) => {
         handleMove(msg.data);
     else if(msg.type === 'search')
         handleSearch(msg.data);
+    else if(msg.type === 'initPlay')
+        handleInitPlay();
+    else if(msg.type === 'startAnalysis')
+        handleStartAnalysis();
+    else if(msg.type === 'stopAnalysis')
+        handleStopAnalysis();
 }
+
+self.postMessage({
+    type: 'ready'
+});

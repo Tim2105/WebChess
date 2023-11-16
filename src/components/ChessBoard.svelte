@@ -47,6 +47,12 @@
      */
     export let lastMove = null;
 
+    /**
+     * @description Ob illegale Züge erlaubt sein sollen.
+     * @type {boolean}
+     */
+    export let allowIllegalMoves = false;
+
     let selectedSquare = null;
     let focussedSquare = null;
 
@@ -80,6 +86,62 @@
                     // Emittiere ein 'move'-Event
                     dispatch('move', move);
                     selectedSquare = null;
+                } else if(selectedSquare != null && board.pieces[selectedSquare] && allowIllegalMoves) {
+                    // Aktualisiere den Fen-String mit der neuen Position
+
+                    // Brich ab, wenn ein Bauer auf die erste oder letzte Reihe gezogen wird
+                    if(board.pieces[selectedSquare].toLowerCase() === 'p' &&
+                        (Math.floor((square / 8) % 7) === 0 || Math.floor((selectedSquare / 8) % 7) === 0))
+                        return;
+
+                    // Setze die Figur auf das Zielfeld
+                    board.pieces[square] = board.pieces[selectedSquare];
+
+                    // Entferne die Figur vom Ursprungsfeld
+                    board.pieces[selectedSquare] = '';
+
+                    // Aktualisiere Rochadenrechte
+                    let whiteKingside = board.castling.includes('K');
+                    let whiteQueenside = board.castling.includes('Q');
+                    let blackKingside = board.castling.includes('k');
+                    let blackQueenside = board.castling.includes('q');
+
+                    if(board.pieces[square] === 'K') {
+                        whiteKingside = false;
+                        whiteQueenside = false;
+                    } else if(board.pieces[square] === 'k') {
+                        blackKingside = false;
+                        blackQueenside = false;
+                    } else if(board.pieces[square] === 'R') {
+                        if(selectedSquare === 7)
+                            whiteKingside = false;
+                        else if(selectedSquare === 0)
+                            whiteQueenside = false;
+                    } else if(board.pieces[square] === 'r') {
+                        if(selectedSquare === 63)
+                            blackKingside = false;
+                        else if(selectedSquare === 56)
+                            blackQueenside = false;
+                    }
+
+                    board.castling = (whiteKingside ? 'K' : '') + (whiteQueenside ? 'Q' : '') +
+                                            (blackKingside ? 'k' : '') + (blackQueenside ? 'q' : '');
+
+                    // Setze die 50-Züge-Regel zurück
+                    board.fiftyMoveRule = 0;
+
+                    // Zähle die Zugnummer hoch, wenn Schwarz gezogen hat
+                    if(board.turn === 'b')
+                        board.fullMove++;
+
+                    // Setze das En-Passant-Ziel zurück
+                    board.enPassant = '-';
+
+                    // Wechsle den Spieler
+                    board.turn = board.turn === 'w' ? 'b' : 'w';
+
+                    // Emittiere ein 'newfen'-Event
+                    dispatch('newfen', board.toFen());
                 } else {
                     // Wähle das Feld aus, wenn eine Figur darauf steht
                     if(board.pieces[square])

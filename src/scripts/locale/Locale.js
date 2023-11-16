@@ -65,6 +65,12 @@ export const translations = {
         'msg.drawByThreefoldRepetition': 'Draw by threefold repetition',
         'msg.drawByFiftyMoveRule': 'Draw by fifty move rule',
         'msg.drawByInsufficientMaterial': 'Draw by insufficient material',
+        'text.score': 'Score',
+        'text.depth': 'Depth',
+        'text.knps': 'kNps',
+        'text.bestMove': 'Best move',
+        'text.variations': 'Variations',
+        'text.loading': 'Loading',
     },
     de: {
         'app.title': 'WebChess',
@@ -82,6 +88,12 @@ export const translations = {
         'msg.drawByThreefoldRepetition': 'Remis durch dreifache Stellungswiederholung',
         'msg.drawByFiftyMoveRule': 'Remis durch die 50-Züge-Regel',
         'msg.drawByInsufficientMaterial': 'Remis durch unzureichendes Material',
+        'text.score': 'Bewertung',
+        'text.depth': 'Tiefe',
+        'text.knps': 'kNps',
+        'text.bestMove': 'Bester Zug',
+        'text.variations': 'Varianten',
+        'text.loading': 'Lädt',
     },
     fr: {
         'app.title': 'WebChess',
@@ -99,5 +111,11 @@ export const translations = {
         'msg.drawByThreefoldRepetition': 'Partie nulle par triple répétition de position',
         'msg.drawByFiftyMoveRule': 'Partie nulle par la règle des 50 coups',
         'msg.drawByInsufficientMaterial': 'Partie nulle par matériel insuffisant',
+        'text.score': 'Évaluation',
+        'text.depth': 'Profondeur',
+        'text.knps': 'kNps',
+        'text.bestMove': 'Meilleur coup',
+        'text.variations': 'Variantes',
+        'text.loading': 'Chargement',
     }
 };

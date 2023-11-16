@@ -51,7 +51,7 @@
     let engineWorker = null;
     let isWorkerReady = false;
 
-    onMount(() => {
+    onMount(async () => {
         engineWorker = new ChessWorker();
 
         engineWorker.onmessage = (msg) => {
@@ -62,6 +62,9 @@
                     handleEngineMove(msg.data);
                     break;
                 case 'ready':
+                    engineWorker.postMessage({
+                        type: 'initPlay'
+                    });
                     isWorkerReady = true;
                     break;
                 case 'error':
@@ -475,6 +478,5 @@
             gap: 0.25rem;
         }
     }
-
 
 </style>
