@@ -150,7 +150,7 @@
             {/if}
         {/if}
         {#if isLegalDestination}
-            <img class="legalMoveDot" src="/LegalMoveDot.svg" alt="." />
+            <img class="legalMoveDot" src="/LegalMoveDot.svg" alt="." preload />
         {/if}
         <div class="lastMoveBorderContainer {isOrigOrDestOfLastMove ? 'lastMove' : ''}
                     {isFocussed ? 'focussed' : ''} {isHovered ? 'hovered' : ''}">
