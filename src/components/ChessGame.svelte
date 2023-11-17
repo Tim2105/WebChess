@@ -195,9 +195,9 @@
         if(timerInterval && lastTimestamp) {
             const now = performance.now();
 
-            // Inkrementiere die Zeit des Spielers um 10ms, der gerade am Zug war
+            // Inkrementiere die Zeit des Spielers um 15ms, der gerade am Zug war
             // um für die Berechnungdauer der Anwendung zu kompensieren
-            const increment = 10;
+            const increment = 15;
 
             if(board.turn === 'w')
                 whiteTime -= now - lastTimestamp - increment;
