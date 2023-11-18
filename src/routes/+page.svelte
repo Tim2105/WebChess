@@ -71,6 +71,10 @@
 
         -webkit-tap-highlight-color: transparent;
 
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+
         background-color: #ebf5ff;
     }
 

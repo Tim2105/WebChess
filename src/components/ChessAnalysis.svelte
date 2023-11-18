@@ -3,6 +3,7 @@
     import AnalysisBoard from './AnalysisBoard.svelte';
     import ChessBoard from "./ChessBoard.svelte";
     import * as Engine from '../scripts/wasm/Engine.js';
+    import * as Locale from '../scripts/locale/Locale.js';
     import ChessWorker from '../scripts/WorkerScript.js?worker';
     import { Board, fenToBoard } from '../scripts/Chess.js';
 
@@ -11,17 +12,32 @@
 
     let analysisData = new Engine.AnalysisData(0, 0, 1, []);
 
+    function attachFan(analysisData) {
+        for(const variation of analysisData.variations) {
+            for(let i = 0; i < variation.moves.length; i++) {
+                variation.moves[i].fan = Engine.moveToFigurineNotation(variation.moves[i]);
+                Engine.makeMove(variation.moves[i]);
+            }
+
+            for(let i = 0; i < variation.moves.length; i++)
+                Engine.undoMove();
+        }
+    }
+
     function updateAnalysisData(analysis) {
         /**
          * @type {Engine.AnalysisData}
          */
-        analysisData = JSON.parse(analysis);
+        analysisData = Engine.AnalysisData.fromJSON(analysis);
 
         // Drehe die Bewertung um, wenn Schwarz am Zug ist
         if(board.turn === 'b') {
             for(const variation of analysisData.variations)
                 variation.score = -variation.score;
         }
+
+        // Füge allen Zügen die FAN (Figurine Algebraic Notation) hinzu
+        attachFan(analysisData);
     }
 
     let board = fenToBoard('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1');
@@ -29,7 +45,6 @@
     let lastMove = null;
 
     onMount(() => {
-        Engine.setBoard('8/bp1k4/2p5/8/1n4P1/1P3P2/6K1/4R3 w - - 0 1');
         updateState(null);
         startAnalysis();
     });
@@ -106,19 +121,33 @@
         updateState(null);
     }
 
+    let allowIllegalMoves = false;
+
+    let allowIllegalMovesText = Locale.getTranslation('text.allowIllegalMoves');
+    Locale.addChangeListener(() => {
+        allowIllegalMovesText = Locale.getTranslation('text.allowIllegalMoves');
+    });
+
 </script>
 
 <div class="container">
 
+    <div class="checkboxContainer">
+        <div class="label">
+            {allowIllegalMovesText}
+        </div>
+        <input type="checkbox" class="allowIllegalMoves" bind:checked={allowIllegalMoves} />
+    </div>
+
     <div class="board">
         <ChessBoard board={board} lastMove={lastMove}
-                    legalMoves={legalMoves} allowIllegalMoves={false}
+                    legalMoves={legalMoves} allowIllegalMoves={allowIllegalMoves}
                     on:move={handleUserMove}
                     on:newfen={handleNewFen} />
     </div>
 
     <div class="analysis">
-        <AnalysisBoard engine={Engine} analysisData={analysisData} />
+        <AnalysisBoard analysisData={analysisData} />
     </div>
 
 </div>
@@ -126,6 +155,8 @@
 <style>
 
     .container {
+        container-type: inline-size;
+
         position: relative;
 
         width: 100%;
@@ -138,6 +169,8 @@
 
         margin: 0;
         padding: 0;
+
+        overflow-y: hidden;
     }
 
     .board {
@@ -146,6 +179,28 @@
         align-items: center;
 
         aspect-ratio: 1/1;
+    }
+
+    .checkboxContainer {
+        align-self: flex-end;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin: 1rem 1rem 1rem 0;
+    }
+
+    .label {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    .allowIllegalMoves {
+        width: 1.5rem;
+        height: 1.5rem;
+
+        margin-left: 1rem;
     }
 
     .analysis {
@@ -177,27 +232,27 @@
 
     @media (orientation: portrait) {
         .container {
-            justify-content: flex-start;
+            justify-content: space-around;
         }
 
         .board {
             width: 100%;
-
-            margin-top: 18.5%;
-            margin-top: 14cqh;
         }
 
         .analysis {
             width: 100%;
-
-            position: absolute;
-            top: 100%;
         }
     }
 
-    @media (orientation: portrait) and (min-aspect-ratio: 5/6) {
+    @media (orientation: portrait) and (min-aspect-ratio: 5/7) {
         .board {
             width: 80%;
+        }
+    }
+
+    @media (orientation: portrait) and (min-aspect-ratio: 8/9) {
+        .board {
+            width: 70%;
         }
     }
 

@@ -1,7 +1,6 @@
 <script>
     import * as Locale from '/src/scripts/locale/Locale.js'
-
-    export let Engine;
+    import * as Engine from '/src/scripts/wasm/Engine.js'
 
     export let analysisData;
 
@@ -31,88 +30,81 @@
 </script>
 
 <div class="container">
+    <div class="content">
 
-    <div class="mainInfo infoRow">
-        <div class="pvScore block">
-            <div>{scoreString}</div>
-            {#if analysisData && analysisData.variations.length > 0}
-                <div class="value vbig">{scoreToString(analysisData.variations[0].score)}</div>
-            {:else}
-                <div class="value vbig">{loadingString}</div>
-            {/if}
+        <div class="mainInfo infoRow">
+            <div class="pvScore block">
+                <div>{scoreString}</div>
+                {#if analysisData && analysisData.variations.length > 0}
+                    <div class="value vbig">{scoreToString(analysisData.variations[0].score)}</div>
+                {:else}
+                    <div class="value vbig">{loadingString}</div>
+                {/if}
+            </div>
+            <div class="bestMove block">
+                <div>{bestMoveString}</div>
+                {#if analysisData && analysisData.variations.length > 0}
+                    <div class="value vsmall move">{analysisData.variations[0].moves[0].fan}</div>
+                {:else}
+                    <div class="value vsmall">{loadingString}</div>
+                {/if}
+            </div>
         </div>
-        <div class="bestMove block">
-            <div>{bestMoveString}</div>
-            {#if analysisData && analysisData.variations.length > 0}
-                <div class="value vsmall">{analysisData.variations[0].moves[0]}</div>
-            {:else}
-                <div class="value vsmall">{loadingString}</div>
-            {/if}
-        </div>
-    </div>
 
-    <div class="metaInfo infoRow">
-        <div class="depth block">
-            <div>{depthString}</div>
-            <div class="value vsmall">{analysisData.depth}</div>
+        <div class="metaInfo infoRow">
+            <div class="depth block">
+                <div>{depthString}</div>
+                <div class="value vsmall">{analysisData.depth}</div>
+            </div>
+            <div class="knps block">
+                <div>{knpsString}</div>
+                <div class="value vbig">{Math.round(analysisData.nodes / analysisData.time)}</div>
+            </div>
         </div>
-        <div class="knps block">
-            <div>{knpsString}</div>
-            <div class="value vbig">{Math.round(analysisData.nodes / analysisData.time)}</div>
-        </div>
-    </div>
 
-    {#if analysisData && analysisData.variations.length > 0}
-        <div class="variations">
-            <div>{variationsString}</div>
-            {#each analysisData.variations as variation}
-                <div class="variation">
-                    <div class="scoreFirstMoveContainer">
-                        <div class="score">
-                            {variation.score}
+        {#if analysisData && analysisData.variations.length > 0}
+            <div class="variations">
+                <div>{variationsString}</div>
+                {#each analysisData.variations as variation}
+                    <div class="variation">
+                        <div class="scoreContainer">
+                            <div class="score">
+                                {scoreToString(variation.score)}
+                            </div>
                         </div>
-                        <div class="firstMoveRow">
-                            {#each {length: 4} as _, i}
-                                {#if variation.moves.length > i}
-                                    <div class="move">
-                                        {variation.moves[i]}
-                                    </div>
-                                {/if}
+                        <div class="moves">
+                            {#each variation.moves as move}
+                                <div class="move">
+                                    {move.fan}
+                                </div>
                             {/each}
                         </div>
                     </div>
-                    <div class="remainingMoves">
-                        {#each variation.moves.slice(4) as move}
-                            <div class="move">
-                                {move}
-                            </div>
-                        {/each}
-                    </div>
-                </div>
-            {/each}
-        </div>
-    {/if}
+                {/each}
+            </div>
+        {/if}
 
+    </div>
 </div>
 
 <style>
 
     .container {
-        container-type: inline-size;
-
         position: relative;
 
         width: 100%;
-        height: 100%;
+        height: 4.5rem;
 
         z-index: 3;
+    }
+
+    .content {
+        width: 100%;
 
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-
-        box-sizing: border-box;
 
         margin: 0;
         padding-top: 1.5rem;
@@ -126,16 +118,20 @@
     }
 
     @media (orientation: portrait) {
-        .container {
-            transform: translateY(-6rem);
+        .content {
+            position: absolute;
+            top: 0;
+
+            transform: translateY(0);
+
             transition: transform 0.25s ease-out;
 
-            font-size: min(1.5rem, 9vw);
-            font-size: min(1.5rem, 9cqw);
+            font-size: min(1.1rem, 5vw);
+            font-size: min(1.1rem, 5cqw);
         }
 
-        .container:hover {
-            transform: translateY(-100%);
+        .content:hover {
+            transform: translateY(-73%);
             transition: transform 0.25s ease-out;
         }
     }
@@ -156,10 +152,12 @@
 
     .block {
         width: 100%;
+        height: 4rem;
+        height: 10cqh;
 
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
 
         gap: 0.5rem;
     }
@@ -179,7 +177,7 @@
     }
 
     .variations {
-        width: 100%;
+        width: fit-content;
 
         display: flex;
         flex-direction: column;
@@ -187,60 +185,90 @@
         align-items: center;
 
         margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+        gap: 1rem;
+    }
+
+    .variations > div:first-child {
+        font-weight: bold;
     }
 
     .variation {
         width: 100%;
 
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: flex-start;
         align-items: center;
 
-        gap: 0.5rem;
+        gap: 1.5rem;
 
-        margin-bottom: 1.5rem;
+        background-image: linear-gradient(to right, #afcbed 0%, #f5f7f6 74%);
+        border-radius: 0.5rem;
     }
 
-    .scoreFirstMoveContainer {
+    .scoreContainer {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-
-        gap: 2rem;
     }
 
-    .firstMoveRow {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-
-        gap: 1rem;
-    }
-
-    .firstMoveRow .move {
-        width: 5rem;
-    }
-
-    .scoreFirstMoveContainer .move:first-child {
-        font-weight: bold;
-    }
-
-    .remainingMoves {
+    .moves {
+        height: 2rem;
+        height: 5cqh;
         width: 100%;
+        overflow-y: hidden;
 
-        display: none;
+        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: center;
+
+        gap: 0.5rem;
     }
 
-    .remainingMoves .move {
-        width: 5rem;
-        width: max(5rem, 10cqw);
+    .value {
+        height: 1.5rem;
+        height: 3.75cqh;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .move {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    @media (orientation: portrait) {
+        .variation:hover .moves {
+            height: 4.5rem;
+            height: calc(5cqh * 2 + 0.5rem);
+
+            overflow-y: auto;
+        }
+
+        .moves .move {
+            padding-top: 0;
+        }
+    }
+
+    .moves .move {
+        width: 3.75rem;
+
+        height: 2rem;
+        height: 5cqh;
+    }
+
+    .move:first-child {
+        font-weight: bold;
     }
 
 </style>

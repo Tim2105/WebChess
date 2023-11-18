@@ -206,6 +206,7 @@ export class AnalysisData {
      * @description Erstellt eine Analyse aus einem JSON-Objekt.
      */
     static fromJSON(json) {
+        json = JSON.parse(json);
         return new AnalysisData(json.depth, json.nodes, json.time,
                                 json.variations.map(variation => Variation.fromJSON(variation)));
     }

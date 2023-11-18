@@ -71,6 +71,7 @@ export const translations = {
         'text.bestMove': 'Best move',
         'text.variations': 'Variations',
         'text.loading': 'Loading',
+        'text.allowIllegalMoves': 'Allow illegal moves'
     },
     de: {
         'app.title': 'WebChess',
@@ -94,6 +95,7 @@ export const translations = {
         'text.bestMove': 'Bester Zug',
         'text.variations': 'Varianten',
         'text.loading': 'Lädt',
+        'text.allowIllegalMoves': 'Illegale Züge erlauben'
     },
     fr: {
         'app.title': 'WebChess',
@@ -117,5 +119,6 @@ export const translations = {
         'text.bestMove': 'Meilleur coup',
         'text.variations': 'Variantes',
         'text.loading': 'Chargement',
+        'text.allowIllegalMoves': 'Autoriser les coups illégaux'
     }
 };
