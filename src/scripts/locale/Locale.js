@@ -55,6 +55,7 @@ export const translations = {
         'game.white': 'White',
         'game.black': 'Black',
         'prompt.newGame': 'New game',
+        'prompt.analyze': 'Analyze',
         'msg.close': 'Close',
         'msg.gameOver': 'Game over',
         'msg.whiteWinsByCheckmate': 'White wins by checkmate',
@@ -71,7 +72,9 @@ export const translations = {
         'text.bestMove': 'Best move',
         'text.variations': 'Variations',
         'text.loading': 'Loading',
-        'text.allowIllegalMoves': 'Allow illegal moves'
+        'text.allowIllegalMoves': 'Allow illegal moves',
+        'text.fen': 'FEN',
+        'text.loadFen': 'Load FEN'
     },
     de: {
         'app.title': 'WebChess',
@@ -79,6 +82,7 @@ export const translations = {
         'game.white': 'Weiss',
         'game.black': 'Schwarz',
         'prompt.newGame': 'Neues Spiel',
+        'prompt.analyze': 'Analysieren',
         'msg.close': 'Schließen',
         'msg.gameOver': 'Spiel vorbei',
         'msg.whiteWinsByCheckmate': 'Weiß gewinnt durch Schachmatt',
@@ -95,7 +99,9 @@ export const translations = {
         'text.bestMove': 'Bester Zug',
         'text.variations': 'Varianten',
         'text.loading': 'Lädt',
-        'text.allowIllegalMoves': 'Illegale Züge erlauben'
+        'text.allowIllegalMoves': 'Illegale Züge erlauben',
+        'text.fen': 'FEN',
+        'text.loadFen': 'FEN laden'
     },
     fr: {
         'app.title': 'WebChess',
@@ -103,6 +109,7 @@ export const translations = {
         'game.white': 'Blanc',
         'game.black': 'Noir',
         'prompt.newGame': 'Nouvelle partie',
+        'prompt.analyze': 'Analyser',
         'msg.close': 'Fermer',
         'msg.gameOver': 'Partie terminée',
         'msg.whiteWinsByCheckmate': 'Les blancs gagnent par échec et mat',
@@ -119,6 +126,8 @@ export const translations = {
         'text.bestMove': 'Meilleur coup',
         'text.variations': 'Variantes',
         'text.loading': 'Chargement',
-        'text.allowIllegalMoves': 'Autoriser les coups illégaux'
+        'text.allowIllegalMoves': 'Autoriser les coups illégaux',
+        'text.fen': 'FEN',
+        'text.loadFen': 'Charger FEN'
     }
 };

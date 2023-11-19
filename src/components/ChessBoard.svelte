@@ -125,20 +125,10 @@
                     }
 
                     board.castling = (whiteKingside ? 'K' : '') + (whiteQueenside ? 'Q' : '') +
-                                            (blackKingside ? 'k' : '') + (blackQueenside ? 'q' : '');
-
-                    // Setze die 50-Züge-Regel zurück
-                    board.fiftyMoveRule = 0;
-
-                    // Zähle die Zugnummer hoch, wenn Schwarz gezogen hat
-                    if(board.turn === 'b')
-                        board.fullMove++;
+                                     (blackKingside ? 'k' : '') + (blackQueenside ? 'q' : '');
 
                     // Setze das En-Passant-Ziel zurück
                     board.enPassant = '-';
-
-                    // Wechsle den Spieler
-                    board.turn = board.turn === 'w' ? 'b' : 'w';
 
                     // Emittiere ein 'newfen'-Event
                     dispatch('newfen', board.toFen());
@@ -182,21 +172,21 @@
     }
 
     function focusSquareBelow() {
-        if(!focussedSquare)
+        if(focussedSquare === null)
             focusSquare(60);
         else
             focusSquare((focussedSquare - 8 + 64) % 64);
     }
 
     function focusSquareAbove() {
-        if(!focussedSquare)
+        if(focussedSquare === null)
             focusSquare(4);
         else
             focusSquare((focussedSquare + 8) % 64);
     }
 
     function focusSquareLeft() {
-        if(!focussedSquare)
+        if(focussedSquare === null)
             focusSquare(31);
         else {
             const file = focussedSquare % 8;
@@ -209,7 +199,7 @@
     }
 
     function focusSquareRight() {
-        if(!focussedSquare)
+        if(focussedSquare === null)
             focusSquare(24);
         else {
             const file = focussedSquare % 8;

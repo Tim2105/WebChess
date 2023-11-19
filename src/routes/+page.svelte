@@ -4,11 +4,11 @@
     import ChessGame from '../components/ChessGame.svelte';
     import GameOverDialog from '../components/dialogs/GameOverDialog.svelte';
 
-    let gameComponent = null;
-
     let showGameOverDialog = false;
     let winner = null;
     let reason = null;
+
+    let applicationWindow = 'game';
 
     function handleGameOver(msg) {
         msg = msg.detail;
@@ -22,11 +22,15 @@
         showGameOverDialog = false;
     }
 
-    function reset() {
+    function resetGame() {
+        applicationWindow = 'game';
+
         winner = null;
         reason = null;
+    }
 
-        gameComponent.setup();
+    function setAnalysis() {
+        applicationWindow = 'analysis';
     }
 
     function handleClickOutside(event) {
@@ -41,21 +45,24 @@
 
 <div class="page">
     <div class="navbar">
-        <Navbar on:newgame={reset} />
+        <Navbar on:newgame={resetGame}
+                on:analysis={setAnalysis} />
     </div>
 
     <main class="container">
-        <!-- <ChessGame whiteFullTime={300000} blackFullTime={300000}
-                on:gameover={handleGameOver} bind:this={gameComponent} />
+        {#if applicationWindow === 'game'}
+            <ChessGame whiteFullTime={300000} blackFullTime={300000}
+                    on:gameover={handleGameOver} />
 
-        {#if showGameOverDialog}
-            <div class="gameOverDialog">
-                <GameOverDialog winner={winner} reason={reason}
-                                on:close={closeGameOverDialog} />
-            </div>
-        {/if} -->
-
-        <ChessAnalysis />
+            {#if showGameOverDialog}
+                <div class="gameOverDialog">
+                    <GameOverDialog winner={winner} reason={reason}
+                                    on:close={closeGameOverDialog} />
+                </div>
+            {/if}
+        {:else if applicationWindow === 'analysis'}
+            <ChessAnalysis />
+        {/if}
     </main>
 </div>
 
@@ -113,6 +120,11 @@
             width: 100%;
             height: min(10%, 3rem);
         }
+
+        .container {
+            width: 100%;
+            height: calc(100% - min(10%, 3rem));
+        }
     }
 
     @media (orientation: portrait) {
@@ -124,13 +136,15 @@
             width: max(40%, 5rem);
             height: 100%;
         }
+
+        .container {
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .container {
         position: relative;
-
-        width: 100%;
-        height: 100%;
 
         display: flex;
         justify-content: center;

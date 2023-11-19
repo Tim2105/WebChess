@@ -43,6 +43,7 @@
     let board = fenToBoard('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1');
     let legalMoves = [];
     let lastMove = null;
+    let fenString = '';
 
     onMount(() => {
         updateState(null);
@@ -124,26 +125,46 @@
     let allowIllegalMoves = false;
 
     let allowIllegalMovesText = Locale.getTranslation('text.allowIllegalMoves');
+    let fenText = Locale.getTranslation('text.fen');
+    let loadFenText = Locale.getTranslation('text.loadFen');
     Locale.addChangeListener(() => {
         allowIllegalMovesText = Locale.getTranslation('text.allowIllegalMoves');
+        fenText = Locale.getTranslation('text.fen');
+        loadFenText = Locale.getTranslation('text.loadFen');
     });
+
+    function setFenFromInput() {
+        try {
+            handleNewFen({ detail: fenString });
+        } catch(e) {}
+    }
 
 </script>
 
 <div class="container">
 
-    <div class="checkboxContainer">
-        <div class="label">
-            {allowIllegalMovesText}
+    <div class="controlBoardContainer">
+        <div class="controlContainer">
+            <div class="checkboxContainer">
+                <div class="label">
+                    {allowIllegalMovesText}
+                </div>
+                <input type="checkbox" class="allowIllegalMoves" bind:checked={allowIllegalMoves} />
+            </div>
+            <div class="textInputContainer">
+                <input type="text" class="fenInput" bind:value={fenString} placeholder="{fenText}" />
+                <button class="fenButton" on:click={setFenFromInput}>
+                    {loadFenText}
+                </button>
+            </div>
         </div>
-        <input type="checkbox" class="allowIllegalMoves" bind:checked={allowIllegalMoves} />
-    </div>
 
-    <div class="board">
-        <ChessBoard board={board} lastMove={lastMove}
-                    legalMoves={legalMoves} allowIllegalMoves={allowIllegalMoves}
-                    on:move={handleUserMove}
-                    on:newfen={handleNewFen} />
+        <div class="board">
+            <ChessBoard board={board} lastMove={lastMove}
+                        legalMoves={legalMoves} allowIllegalMoves={allowIllegalMoves}
+                        on:move={handleUserMove}
+                        on:newfen={handleNewFen} />
+        </div>
     </div>
 
     <div class="analysis">
@@ -181,19 +202,81 @@
         aspect-ratio: 1/1;
     }
 
-    .checkboxContainer {
-        align-self: flex-end;
+    .controlContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
 
+        margin: 0.5rem 0 0 0;
+    }
+
+    .checkboxContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .textInputContainer {
         display: flex;
         justify-content: center;
         align-items: center;
 
-        margin: 1rem 1rem 1rem 0;
+        gap: 0.25rem;
+
+        max-width: 100%;
     }
 
     .label {
-        font-size: 1.25rem;
+        font-size: 1rem;
         text-align: center;
+    }
+
+    .fenInput, .fenButton {
+        font-size: 0.75rem;
+    }
+
+    .fenInput {
+        width: 70%;
+        height: 1.5rem;
+
+        border: 1px solid black;
+        border-radius: 0.25rem;
+    }
+
+    .fenButton {
+        width: 30%;
+
+        border: 1px solid black;
+        border-radius: 0.25rem;
+    }
+
+    @keyframes buttonHover {
+        from {
+            background-image: none;
+            background-size: 0 100%;
+        }
+
+        to {
+            background-image: linear-gradient(to left,
+                                              transparent, transparent 50%,
+                                            #48a9fe 50%, #0beef9 100%);
+            background-size: 200% 100%;
+        }
+    }
+
+    .fenButton:hover {
+        animation: buttonHover 0.15s ease-out -0.05s;
+        animation-fill-mode: forwards;
+
+        cursor: pointer;
+    }
+
+    .fenButton:focus {
+        animation: buttonHover 0.2s ease-out;
+        animation-fill-mode: forwards;
+
+        cursor: pointer;
     }
 
     .allowIllegalMoves {
@@ -207,40 +290,87 @@
         align-self: flex-end;
     }
 
+    .controlBoardContainer {
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 1rem;
+    }
+
     @media (orientation: landscape) {
         .container {
             flex-wrap: wrap;
+            align-content: space-between;
 
             gap: 5%;
         }
 
+        .controlBoardContainer {
+            width: 60%;
+
+            align-items: flex-end;
+        }
+
+        .board {
+            height: 75%;
+        }
+
+        .analysis {
+            height: 100%;
+
+            width: 35%;
+        }
+    }
+
+    @media (orientation: landscape) and (max-aspect-ratio: 6/5) {
+        .board {
+            height: 66%;
+        }
+    }
+
+    @media (orientation: landscape) and (min-aspect-ratio: 19/10) {
         .board {
             height: 100%;
         }
 
         .analysis {
-            height: 100%;
-            width: 40%;
+            width: 25%;
+        }
+
+        .controlBoardContainer {
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            width: 70%;
         }
     }
 
-    @media (orientation: landscape) and (max-aspect-ratio: 7/5) {
-        .board {
-            height: 75%;
-        }
-    }
 
     @media (orientation: portrait) {
         .container {
             justify-content: space-around;
         }
 
+        .controlBoardContainer {
+            width: 95%;
+
+            align-items: center;
+        }
+
         .board {
             width: 100%;
         }
 
         .analysis {
             width: 100%;
+        }
+
+        .controlContainer {
+            margin-left: 10%;
         }
     }
 

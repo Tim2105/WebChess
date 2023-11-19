@@ -6,17 +6,23 @@
     const dispatch = createEventDispatcher();
 
     let newGameText = Locale.getTranslation('prompt.newGame');
+    let analysisText = Locale.getTranslation('prompt.analyze');
     let activeLocale = Locale.getLanguage();
     let activeLocaleFlag = Locale.supportedLanguages[activeLocale].flag;
 
     Locale.addChangeListener((lang) => {
         newGameText = Locale.getTranslation('prompt.newGame');
+        analysisText = Locale.getTranslation('prompt.analyze');
         activeLocale = lang;
         activeLocaleFlag = Locale.supportedLanguages[lang].flag;
     });
 
     function handleNewGame() {
         dispatch('newgame');
+    }
+
+    function handleAnalysis() {
+        dispatch('analysis');
     }
 
     let showSupportedLanguages = false;
@@ -76,6 +82,12 @@
     <div class="option">
         <button on:click={handleNewGame}>
             {newGameText}
+        </button>
+    </div>
+
+    <div class="option">
+        <button on:click={handleAnalysis}>
+            {analysisText}
         </button>
     </div>
 

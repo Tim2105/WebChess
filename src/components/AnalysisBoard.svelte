@@ -1,6 +1,6 @@
 <script>
+    import { isGameOngoing } from '../scripts/wasm/Engine';
     import * as Locale from '/src/scripts/locale/Locale.js'
-    import * as Engine from '/src/scripts/wasm/Engine.js'
 
     export let analysisData;
 
@@ -25,6 +25,15 @@
 
         // Gib die Bewertung immer mit 2 Nachkommastellen aus
         return scoreInCp.toFixed(2);
+    }
+
+    let expandedVariation = null;
+
+    function toggleVariation(variation) {
+        if(expandedVariation === variation)
+            expandedVariation = null;
+        else
+            expandedVariation = variation;
     }
     
 </script>
@@ -65,8 +74,11 @@
         {#if analysisData && analysisData.variations.length > 0}
             <div class="variations">
                 <div>{variationsString}</div>
-                {#each analysisData.variations as variation}
-                    <div class="variation">
+                {#each analysisData.variations as variation, i}
+                    <div class="variation {expandedVariation == i ? 'expanded' : ''}"
+                         role="option" tabindex="0" aria-selected="false"
+                         on:click={() => toggleVariation(i)}
+                         on:keypress={() => toggleVariation(i)}>
                         <div class="scoreContainer">
                             <div class="score">
                                 {scoreToString(variation.score)}
@@ -92,46 +104,60 @@
     .container {
         position: relative;
 
-        width: 100%;
-        height: 4.5rem;
-
         z-index: 3;
     }
 
     .content {
-        width: 100%;
-
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
 
         margin: 0;
-        padding-top: 1.5rem;
+        padding-top: 1rem;
 
         background-color: #afcbed;
         background-image: linear-gradient(to top, #afcbed 0%, #f5f7f6 74%);
     }
 
     @media (orientation: landscape) {
-        
+        .container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
     }
 
     @media (orientation: portrait) {
+        .container {
+            width: 100%;
+            height: 4.5rem;
+        }
+
         .content {
+            width: 100%;
+
             position: absolute;
             top: 0;
 
-            transform: translateY(0);
+            transform: translateY(-0.25rem);
 
             transition: transform 0.25s ease-out;
 
             font-size: min(1.1rem, 5vw);
             font-size: min(1.1rem, 5cqw);
+
+            border-top: 1px solid black;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
         }
 
         .content:hover {
-            transform: translateY(-73%);
+            transform: translateY(-80%);
             transition: transform 0.25s ease-out;
         }
     }
@@ -247,6 +273,15 @@
         align-items: center;
     }
 
+    .moves .move {
+        width: 3.75rem;
+
+        height: 2rem;
+        height: 5cqh;
+
+        padding-top: 0;
+    }
+
     @media (orientation: portrait) {
         .variation:hover .moves {
             height: 4.5rem;
@@ -254,17 +289,49 @@
 
             overflow-y: auto;
         }
-
-        .moves .move {
-            padding-top: 0;
-        }
     }
 
-    .moves .move {
-        width: 3.75rem;
+    @media (orientation: landscape) {
+        .variation {
+            padding-left: 0.5rem;
+        }
 
-        height: 2rem;
-        height: 5cqh;
+        @keyframes buttonHover {
+            from {
+                background-image: none;
+                background-size: 0 100%;
+            }
+
+            to {
+                background-image: linear-gradient(to left,
+                                                transparent, transparent 50%,
+                                                #48a9fe 50%, #0beef9 100%);
+                background-size: 200% 100%;
+            }
+        }
+
+        .variation:hover {
+            animation: buttonHover 0.15s ease-out -0.05s;
+            animation-fill-mode: forwards;
+        }
+
+        .variation:focus {
+            outline: none;
+
+            animation: buttonHover 0.2s ease-out;
+            animation-fill-mode: forwards;
+        }
+
+        .moves .move {
+            width: 2.75rem;
+        }
+
+        .expanded .moves {
+            height: 7rem;
+            height: calc(5cqh * 3 + 1rem);
+
+            overflow-y: auto;
+        }
     }
 
     .move:first-child {
