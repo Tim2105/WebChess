@@ -30,11 +30,9 @@
         }
     };
 
-    $: gameOverMsg = Locale.getTranslation('msg.gameOver');
-
-    $: description = Locale.getTranslation('msg.' + statusTable[winner][reason]);
-
-    $: closeMsg = Locale.getTranslation('msg.close');
+    let gameOverMsg = Locale.getTranslation('msg.gameOver');
+    let description = Locale.getTranslation('msg.' + statusTable[winner][reason]);
+    let closeMsg = Locale.getTranslation('msg.close');
 
     Locale.addChangeListener((lang) => {
         gameOverMsg = Locale.getTranslation('msg.gameOver');

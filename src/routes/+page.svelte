@@ -4,6 +4,8 @@
     import ChessGame from '../components/ChessGame.svelte';
     import GameOverDialog from '../components/dialogs/GameOverDialog.svelte';
 
+    let gameComponent = null;
+
     let showGameOverDialog = false;
     let winner = null;
     let reason = null;
@@ -23,13 +25,18 @@
     }
 
     function resetGame() {
+        showGameOverDialog = false;
         applicationWindow = 'game';
 
         winner = null;
         reason = null;
+
+        if(gameComponent)
+            gameComponent.setup(null);
     }
 
     function setAnalysis() {
+        showGameOverDialog = false;
         applicationWindow = 'analysis';
     }
 
@@ -52,7 +59,7 @@
     <main class="container">
         {#if applicationWindow === 'game'}
             <ChessGame whiteFullTime={300000} blackFullTime={300000}
-                    on:gameover={handleGameOver} />
+                    on:gameover={handleGameOver} bind:this={gameComponent} />
 
             {#if showGameOverDialog}
                 <div class="gameOverDialog">

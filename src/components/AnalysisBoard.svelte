@@ -10,6 +10,7 @@
     let bestMoveString = Locale.getTranslation('text.bestMove');
     let variationsString = Locale.getTranslation('text.variations');
     let loadingString = Locale.getTranslation('text.loading');
+    let noMoveString = Locale.getTranslation('text.noMove');
 
     Locale.addChangeListener(() => {
         scoreString = Locale.getTranslation('text.score');
@@ -18,9 +19,34 @@
         bestMoveString = Locale.getTranslation('text.bestMove');
         variationsString = Locale.getTranslation('text.variations');
         loadingString = Locale.getTranslation('text.loading');
+        noMoveString = Locale.getTranslation('text.noMove');
     });
 
     function scoreToString(score) {
+        // Überprüfe, ob die Bewertung eine Mattbewertung ist
+        if(Math.abs(score) > 20000) {
+            // Berechne die Anzahl der Züge bis zum Matt
+            const movesToMate = Math.floor((21000 - Math.abs(score) + 1) / 2);
+
+            let mateString = '';
+
+            if(movesToMate === 0) {
+                if(score < 0)
+                    mateString += '0-1';
+                else
+                    mateString += '1-0';
+            } else {
+                // Wenn die Bewertung positiv ist, ist Weiß im Vorteil
+                if(score < 0)
+                    mateString += '-';
+
+                // Füge die Anzahl der Züge bis zum Matt hinzu
+                mateString += 'M' + movesToMate;
+            }
+
+            return mateString;
+        }
+
         const scoreInCp = score / 100;
 
         // Gib die Bewertung immer mit 2 Nachkommastellen aus
@@ -53,7 +79,8 @@
             <div class="bestMove block">
                 <div>{bestMoveString}</div>
                 {#if analysisData && analysisData.variations.length > 0}
-                    <div class="value vsmall move">{analysisData.variations[0].moves[0].fan}</div>
+                    <div class="value vsmall move">{analysisData.variations[0].moves[0].fan === undefined ?
+                                                    noMoveString : analysisData.variations[0].moves[0].fan}</div>
                 {:else}
                     <div class="value vsmall">{loadingString}</div>
                 {/if}
@@ -86,8 +113,8 @@
                         </div>
                         <div class="moves">
                             {#each variation.moves as move}
-                                <div class="move">
-                                    {move.fan}
+                                <div class="move {move.fan === undefined ? 'stretch' : ''}">
+                                    {move.fan === undefined ? noMoveString : move.fan}
                                 </div>
                             {/each}
                         </div>
@@ -129,6 +156,8 @@
         .content {
             width: 100%;
             height: 100%;
+
+            font-size: 1.3rem;
         }
     }
 
@@ -144,7 +173,7 @@
             position: absolute;
             top: 0;
 
-            transform: translateY(-0.25rem);
+            transform: translateY(-0.35rem);
 
             transition: transform 0.25s ease-out;
 
@@ -157,7 +186,7 @@
         }
 
         .content:hover {
-            transform: translateY(-80%);
+            transform: translateY(calc(-100% + 4.5rem));
             transition: transform 0.25s ease-out;
         }
     }
@@ -203,7 +232,7 @@
     }
 
     .variations {
-        width: fit-content;
+        width: 90%;
 
         display: flex;
         flex-direction: column;
@@ -241,12 +270,15 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
+
+        width: 3.75rem;
     }
 
     .moves {
-        height: 2rem;
-        height: 5cqh;
         width: 100%;
+        height: 100%;
+        max-height: 2rem;
+        max-height: 5cqh;
         overflow-y: hidden;
 
         display: flex;
@@ -274,7 +306,7 @@
     }
 
     .moves .move {
-        width: 3.75rem;
+        width: 4rem;
 
         height: 2rem;
         height: 5cqh;
@@ -282,10 +314,14 @@
         padding-top: 0;
     }
 
+    .moves .move.stretch {
+        width: 100%;
+    }
+
     @media (orientation: portrait) {
         .variation:hover .moves {
-            height: 4.5rem;
-            height: calc(5cqh * 2 + 0.5rem);
+            max-height: 7rem;
+            max-height: calc(5cqh * 3 + 1rem);
 
             overflow-y: auto;
         }
@@ -323,12 +359,12 @@
         }
 
         .moves .move {
-            width: 2.75rem;
+            width: 4.75rem;
         }
 
         .expanded .moves {
-            height: 7rem;
-            height: calc(5cqh * 3 + 1rem);
+            max-height: 7rem;
+            max-height: calc(5cqh * 3 + 1rem);
 
             overflow-y: auto;
         }

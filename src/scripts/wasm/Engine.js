@@ -466,6 +466,9 @@ export function startAnalysis(updateCallback) {
         throw new Error(exportedFunctions.getError());
     }
 
+    // Ruf die Callback-Funktion ein letztes Mal auf.
+    callbackWrapper();
+
     isAnalysisRunning = false;
 
     // Entferne die Callback-Funktion aus der WebAssembly-Tabelle.

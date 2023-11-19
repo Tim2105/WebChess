@@ -74,7 +74,8 @@ export const translations = {
         'text.loading': 'Loading',
         'text.allowIllegalMoves': 'Allow illegal moves',
         'text.fen': 'FEN',
-        'text.loadFen': 'Load FEN'
+        'text.loadFen': 'Load FEN',
+        'text.noMove': 'No move'
     },
     de: {
         'app.title': 'WebChess',
@@ -101,7 +102,8 @@ export const translations = {
         'text.loading': 'Lädt',
         'text.allowIllegalMoves': 'Illegale Züge erlauben',
         'text.fen': 'FEN',
-        'text.loadFen': 'FEN laden'
+        'text.loadFen': 'FEN laden',
+        'text.noMove': 'Kein Zug'
     },
     fr: {
         'app.title': 'WebChess',
@@ -128,6 +130,7 @@ export const translations = {
         'text.loading': 'Chargement',
         'text.allowIllegalMoves': 'Autoriser les coups illégaux',
         'text.fen': 'FEN',
-        'text.loadFen': 'Charger FEN'
+        'text.loadFen': 'Charger FEN',
+        'text.noMove': 'Pas de coup'
     }
 };

@@ -328,7 +328,7 @@
             padding-top: 12vh;
 
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
 
             box-sizing: border-box;
 
@@ -355,14 +355,24 @@
             margin: 0;
         }
 
-        .option button:first-child {
+        .option:first-child button {
             margin-top: 0.5em;
+        }
+
+        .option:not(:first-child) button {
+            margin-top: -0.15em;
         }
 
         #optionLocale {
             display: flex;
             flex-direction: column-reverse;
-            justify-content: flex-end;
+            justify-content: flex-start;
+
+            height: 100%;
+        }
+
+        #optionLocale button {
+            height: fit-content;
         }
 
         #optionLocale button:not(:first-child) {
@@ -383,7 +393,7 @@
 
         #optionLocale .activeLanguage {
             flex-direction: column-reverse;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
 
             padding-top: 0;

@@ -60,40 +60,53 @@
         if(engineWorker)
             engineWorker.terminate();
 
-        // Starte einen neuen Worker
-        isWorkerReady = false;
-        engineWorker = new ChessWorker();
-        engineWorker.onmessage = (msg) => {
-            msg = msg.data;
-
-            switch(msg.type) {
-                case 'ready':
-                    isWorkerReady = true;
-                    break;
-                case 'analysis':
-                    updateAnalysisData(msg.data);
-                    break;
-                case 'error':
-                    console.error(msg.data);
-                    break;
+        if(!Engine.isGameOngoing()) {
+            let score = 0;
+            if(Engine.isCheckmate()) {
+                if(board.turn === 'w')
+                    score = 21000;
+                else
+                    score = -21000;
             }
+
+            const variation = new Engine.Variation([0], score);
+            analysisData = new Engine.AnalysisData(0, 0, 1, [variation]);
+        } else {
+            // Starte einen neuen Worker
+            isWorkerReady = false;
+            engineWorker = new ChessWorker();
+            engineWorker.onmessage = (msg) => {
+                msg = msg.data;
+
+                switch(msg.type) {
+                    case 'ready':
+                        isWorkerReady = true;
+                        break;
+                    case 'analysis':
+                        updateAnalysisData(msg.data);
+                        break;
+                    case 'error':
+                        console.error(msg.data);
+                        break;
+                }
+            }
+
+            // Starte die Analyse,
+            // sobald der Worker bereit ist
+            const interval = setInterval(() => {
+                if(isWorkerReady) {
+                    clearInterval(interval);
+                    engineWorker.postMessage({
+                        type: 'set',
+                        data: Engine.getBoard()
+                    });
+
+                    engineWorker.postMessage({
+                        type: 'startAnalysis'
+                    });
+                }
+            }, 100);
         }
-
-        // Starte die Analyse,
-        // sobald der Worker bereit ist
-        const interval = setInterval(() => {
-            if(isWorkerReady) {
-                clearInterval(interval);
-                engineWorker.postMessage({
-                    type: 'set',
-                    data: Engine.getBoard()
-                });
-
-                engineWorker.postMessage({
-                    type: 'startAnalysis'
-                });
-            }
-        }, 100);
     }
 
     function updateState(move) {
@@ -203,10 +216,15 @@
     }
 
     .controlContainer {
+        width: 100%;
+        height: 10%;
+
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
+
+        gap: 0.5rem;
 
         margin: 0.5rem 0 0 0;
     }
@@ -228,16 +246,15 @@
     }
 
     .label {
-        font-size: 1rem;
+        font-size: 1.25rem;
         text-align: center;
     }
 
     .fenInput, .fenButton {
-        font-size: 0.75rem;
+        font-size: 1rem;
     }
 
     .fenInput {
-        width: 70%;
         height: 1.5rem;
 
         border: 1px solid black;
@@ -245,10 +262,10 @@
     }
 
     .fenButton {
-        width: 30%;
-
         border: 1px solid black;
         border-radius: 0.25rem;
+
+        padding: 0.25rem 0.5rem;
     }
 
     @keyframes buttonHover {
@@ -311,7 +328,7 @@
         .controlBoardContainer {
             width: 60%;
 
-            align-items: flex-end;
+            align-items: center;
         }
 
         .board {
@@ -327,7 +344,7 @@
 
     @media (orientation: landscape) and (max-aspect-ratio: 6/5) {
         .board {
-            height: 66%;
+            height: 64%;
         }
     }
 
@@ -347,6 +364,16 @@
 
             width: 70%;
         }
+
+        .controlContainer {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
     }
 
 
@@ -356,7 +383,7 @@
         }
 
         .controlBoardContainer {
-            width: 95%;
+            width: 100%;
 
             align-items: center;
         }
@@ -370,19 +397,20 @@
         }
 
         .controlContainer {
+            width: 90%;
             margin-left: 10%;
         }
     }
 
-    @media (orientation: portrait) and (min-aspect-ratio: 5/7) {
+    @media (orientation: portrait) and (min-aspect-ratio: 3/4) {
         .board {
-            width: 80%;
+            width: 88%;
         }
     }
 
     @media (orientation: portrait) and (min-aspect-ratio: 8/9) {
         .board {
-            width: 70%;
+            width: 78%;
         }
     }
 
