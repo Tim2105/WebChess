@@ -75,7 +75,32 @@ export const translations = {
         'text.allowIllegalMoves': 'Allow illegal moves',
         'text.fen': 'FEN',
         'text.loadFen': 'Load FEN',
-        'text.noMove': 'No move'
+        'text.noMove': 'No move',
+        'text.analysisExplanationHeader':
+        `The analysis is done by a custom chess engine, written in C++ (from scratch) and compiled to WebAssembly.
+        During its search, the engine collects various information, most of which is displayed here.
+        `,
+        'text.analysisExplanationScore':
+        `The score is the evaluation of the current position in pawn units.
+        A Score of 1 is equivalent to an advantage of one pawn.
+        A positive score indicates an advantage for white while a negative score indicates an advantage for black.
+        `,
+        'text.analysisExplanationDepth':
+        `The depth is a lower bound for the number of half moves the engine has looked ahead in all variations.
+        `,
+        'text.analysisExplanationBestMove':
+        `The best move is the move the engine thinks is best in the current position.
+        `,
+        'text.analysisExplanationKnps':
+        `The average number of thousand positions (nodes) the engine searches per second
+        or, in other words, the number of positions the engine searches per millisecond.
+        This measurement is an indicator for the speed of the engine.
+        `,
+        'text.analysisExplanationVariations':
+        `The variations contain the sequences of moves, that led the engine to its evaluation.
+        Even though the engine reports the three best variations, only the first one influences the score.
+        The other variations are only collected for user information.
+        `,
     },
     de: {
         'app.title': 'WebChess',
@@ -103,7 +128,32 @@ export const translations = {
         'text.allowIllegalMoves': 'Illegale Züge erlauben',
         'text.fen': 'FEN',
         'text.loadFen': 'FEN laden',
-        'text.noMove': 'Kein Zug'
+        'text.noMove': 'Kein Zug',
+        'text.analysisExplanationHeader':
+        `Die Analyse wird von einer eigenen Schachengine durchgeführt, die (von Grund auf) in C++ geschrieben und in WebAssembly kompiliert wurde.
+        Während der Suche sammelt die Engine verschiedene Informationen, von denen die meisten hier angezeigt werden.
+        `,
+        'text.analysisExplanationScore':
+        `Die Bewertung ist die Evaluation der aktuellen Stellung in Bauerneinheiten.
+        Eine Bewertung von 1 bedeutet einen Vorteil, der einem Bauern entspricht.
+        Eine positive Bewertung deutet auf einen Vorteil für Weiß hin, während eine negative Bewertung auf einen Vorteil für Schwarz hinweist.
+        `,
+        'text.analysisExplanationDepth':
+        `Die Tiefe ist eine untere Schranke für die Anzahl der Halbzüge, die die Engine in allen Varianten vorrausgeschaut hat.
+        `,
+        'text.analysisExplanationBestMove':
+        `Der beste Zug ist der Zug, den die Engine in der aktuellen Stellung für den Besten hält.
+        `,
+        'text.analysisExplanationKnps':
+        `Die durchschnittliche Anzahl der tausend Positionen (Knoten), die die Engine pro Sekunde durchsucht,
+        oder mit anderen Worten, die Anzahl der Positionen, die die Engine pro Millisekunde durchsucht.
+        Dieser Wert ist eine Messgröße für die Geschwindigkeit der Engine.
+        `,
+        'text.analysisExplanationVariations':
+        `Die Varianten enthalten die Zugfolgen, die die Engine zu ihrer Bewertung geführt haben.
+        Obwohl die Engine die drei besten Varianten ausgibt, beeinflusst nur die Erste die Bewertung.
+        Die anderen Varianten werden nur zu Informationszwecken gesammelt.
+        `,
     },
     fr: {
         'app.title': 'WebChess',
@@ -131,6 +181,31 @@ export const translations = {
         'text.allowIllegalMoves': 'Autoriser les coups illégaux',
         'text.fen': 'FEN',
         'text.loadFen': 'Charger FEN',
-        'text.noMove': 'Pas de coup'
+        'text.noMove': 'Pas de coup',
+        'text.analysisExplanationHeader':
+        `L'analyse est effectuée par un moteur d'échecs personnalisé, écrit en C++ (à partir de zéro) et compilé en WebAssembly.
+        Pendant sa recherche, le moteur collecte diverses informations, dont la plupart sont affichées ici.
+        `,
+        'text.analysisExplanationScore':
+        `L'évaluation est l'évaluation de la position actuelle en unités de pions.
+        Une évaluation de 1 signifie un avantage équivalent à un pion.
+        Une évaluation positive indique un avantage pour les blancs tandis qu'une évaluation négative indique un avantage pour les noirs.
+        `,
+        'text.analysisExplanationDepth':
+        `La profondeur est une borne inférieure pour le nombre de demi-coups que le moteur a regardé dans toutes les variations.
+        `,
+        'text.analysisExplanationBestMove':
+        `Le meilleur coup est le coup que le moteur pense être le meilleur dans la position actuelle.
+        `,
+        'text.analysisExplanationKnps':
+        `Le nombre de milliers de positions (nœuds) que le moteur recherche par seconde en moyenne
+        ou, en d'autres termes, le nombre de positions que le moteur recherche par milliseconde.
+        Cette mesure est un indicateur de la vitesse du moteur.
+        `,
+        'text.analysisExplanationVariations':
+        `Les variations contiennent les séquences de coups qui ont conduit le moteur à son évaluation.
+        Bien que le moteur signale les trois meilleures variations, seule la première influence l'évaluation.
+        Les autres variations ne sont collectées que pour l'information de l'utilisateur.
+        `,
     }
 };

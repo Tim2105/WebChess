@@ -53,6 +53,18 @@
      */
     export let allowIllegalMoves = false;
 
+    /**
+     * @description Ob die Spaltenbezeichnung angezeigt werden soll.
+     * @type {boolean}
+     */
+    export let showRank = false;
+
+    /**
+     * @description Ob die Reihenbezeichnung angezeigt werden soll.
+     * @type {boolean}
+     */
+    export let showFile = false;
+
     let selectedSquare = null;
     let focussedSquare = null;
 
@@ -263,6 +275,8 @@
                                                     || lastMove.to === rankFileToSquare(rank, file))}
                             isLegalDestination={acceptInput && 
                                                 legalDestFromSelectedSquare.includes(rankFileToSquare(rank, file))}
+                            displayFile={showFile && rank === 7}
+                            displayRank={showRank && file === 0}
                             on:click={handleClick} on:focus={handleFocus} />
             {/each}
         {/each}

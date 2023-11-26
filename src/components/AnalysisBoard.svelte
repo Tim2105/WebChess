@@ -1,6 +1,5 @@
 <script>
-    import { isGameOngoing } from '../scripts/wasm/Engine';
-    import * as Locale from '/src/scripts/locale/Locale.js'
+    import * as Locale from '/src/scripts/locale/Locale.js';
 
     export let analysisData;
 
@@ -157,14 +156,15 @@
             width: 100%;
             height: 100%;
 
-            font-size: 1.3rem;
+            font-size: min(1.3rem, 5vh);
+            font-size: min(1.3rem, 5cqh);
         }
     }
 
     @media (orientation: portrait) {
         .container {
             width: 100%;
-            height: 4.5rem;
+            height: 5.25rem;
         }
 
         .content {
@@ -172,8 +172,6 @@
 
             position: absolute;
             top: 0;
-
-            transform: translateY(-0.35rem);
 
             transition: transform 0.25s ease-out;
 
@@ -186,7 +184,7 @@
         }
 
         .content:hover {
-            transform: translateY(calc(-100% + 4.5rem));
+            transform: translateY(calc(-100% + 5.25rem));
             transition: transform 0.25s ease-out;
         }
     }

@@ -1,5 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
+    import AnalysisExplanation from './dialogs/AnalysisExplanationDialog.svelte';
     import AnalysisBoard from './AnalysisBoard.svelte';
     import ChessBoard from "./ChessBoard.svelte";
     import * as Engine from '../scripts/wasm/Engine.js';
@@ -46,6 +47,12 @@
     let fenString = '';
 
     onMount(() => {
+        // Markiere den gesamten Text im FEN-Input,
+        // wenn dieser fokussiert wird
+        document.getElementById('fenInput').addEventListener('focus', (event) => {
+            event.target.select();
+        });
+
         updateState(null);
         startAnalysis();
     });
@@ -152,9 +159,25 @@
         } catch(e) {}
     }
 
+    let showAnalysisExplanation = false;
+
+    function toggleAnalysisExplanation() {
+        showAnalysisExplanation = !showAnalysisExplanation;
+    }
+
+    function handleKeyDown(event) {
+        if(event.key === 'Escape')
+            showAnalysisExplanation = false;
+    }
+
 </script>
 
 <div class="container">
+
+    <button class="explanationContainer {showAnalysisExplanation ? 'show' : ''}"
+            on:click={toggleAnalysisExplanation}>
+        <AnalysisExplanation />
+    </button>
 
     <div class="controlBoardContainer">
         <div class="controlContainer">
@@ -165,7 +188,7 @@
                 <input type="checkbox" class="allowIllegalMoves" bind:checked={allowIllegalMoves} />
             </div>
             <div class="textInputContainer">
-                <input type="text" class="fenInput" bind:value={fenString} placeholder="{fenText}" />
+                <input type="text" class="fenInput" id="fenInput" bind:value={fenString} placeholder="{fenText}" />
                 <button class="fenButton" on:click={setFenFromInput}>
                     {loadFenText}
                 </button>
@@ -175,16 +198,28 @@
         <div class="board">
             <ChessBoard board={board} lastMove={lastMove}
                         legalMoves={legalMoves} allowIllegalMoves={allowIllegalMoves}
+                        showFile={true} showRank={true}
                         on:move={handleUserMove}
                         on:newfen={handleNewFen} />
         </div>
     </div>
 
     <div class="analysis">
+        <button class="infoButton floatingButton" on:click={toggleAnalysisExplanation}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486
+                         10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8
+                         8-8 8 3.589 8 8-3.589 8-8 8zm.5-11h-1v5h1v-5zm0
+                         6h-1v1h1v-1z"/>
+            </svg>
+        </button>
         <AnalysisBoard analysisData={analysisData} />
     </div>
 
 </div>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <style>
 
@@ -207,6 +242,32 @@
         overflow-y: hidden;
     }
 
+    .explanationContainer {
+        display: none;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        z-index: 6;
+
+        width: 100%;
+        height: 100%;
+
+        background: none;
+        border: none;
+    }
+
+    .explanationContainer:focus {
+        outline: none;
+    }
+
+    .explanationContainer.show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .board {
         display: flex;
         justify-content: center;
@@ -216,6 +277,8 @@
     }
 
     .controlContainer {
+        container-type: inline-size;
+
         width: 100%;
         height: 10%;
 
@@ -246,7 +309,6 @@
     }
 
     .label {
-        font-size: 1.25rem;
         text-align: center;
     }
 
@@ -255,8 +317,6 @@
     }
 
     .fenInput {
-        height: 1.5rem;
-
         border: 1px solid black;
         border-radius: 0.25rem;
     }
@@ -266,6 +326,48 @@
         border-radius: 0.25rem;
 
         padding: 0.25rem 0.5rem;
+    }
+
+    @media (orientation: landscape) {
+        .label {
+            font-size: min(1.25rem, 5vh);
+            font-size: min(1.25rem, 5cqh);
+        }
+
+        .fenInput {
+            width: 60%;
+
+            height: min(1.5rem, 5vh);
+            height: min(1.5rem, 5cqh);
+        }
+
+        .fenButton {
+            width: 35%;
+
+            font-size: min(1rem, 3.5vh);
+            font-size: min(1rem, 3.5cqh);
+        }
+    }
+
+    @media (orientation: portrait) {
+        .label {
+            font-size: min(1.25rem, 5vw);
+            font-size: min(1.25rem, 5cqw);
+        }
+
+        .fenInput {
+            width: 60%;
+
+            height: min(1.5rem, 5vw);
+            height: min(1.5rem, 5cqw);
+        }
+
+        .fenButton {
+            width: 35%;
+
+            font-size: min(1rem, 3.5vw);
+            font-size: min(1rem, 3.5cqw);
+        }
     }
 
     @keyframes buttonHover {
@@ -317,12 +419,36 @@
         gap: 1rem;
     }
 
+    .infoButton {
+        position: absolute;
+        right: 0.5rem;
+
+        z-index: 4;
+
+        width: 3rem;
+        height: 3rem;
+
+        padding: 0;
+
+        border: none;
+
+        background-color: white;
+    }
+
+    .infoButton:hover {
+        cursor: pointer;
+    }
+
     @media (orientation: landscape) {
         .container {
             flex-wrap: wrap;
             align-content: space-between;
 
             gap: 5%;
+        }
+
+        .infoButton {
+            top: 0.5rem;
         }
 
         .controlBoardContainer {
@@ -380,6 +506,10 @@
     @media (orientation: portrait) {
         .container {
             justify-content: space-around;
+        }
+
+        .infoButton {
+            bottom: 0.5rem;
         }
 
         .controlBoardContainer {

@@ -14,6 +14,18 @@
     export let square;
 
     /**
+     * @description Ob die Spaltenbezeichnung angezeigt werden soll.
+     * @type {boolean}
+     */
+    export let displayFile = false;
+
+    /**
+     * @description Ob die Reihenbezeichnung angezeigt werden soll.
+     * @type {boolean}
+     */
+    export let displayRank = false;
+
+    /**
      * @description Die Reihe des Feldes.
      * @type {number}
      */
@@ -155,10 +167,24 @@
         <div class="lastMoveBorderContainer {isOrigOrDestOfLastMove ? 'lastMove' : ''}
                     {isFocussed ? 'focussed' : ''} {isHovered ? 'hovered' : ''}">
     </button>
+
+    {#if displayFile}
+        <div class="fileDisplay info">
+            {String.fromCharCode(97 + file)}
+        </div>
+    {/if}
+
+    {#if displayRank}
+        <div class="rankDisplay info">
+            {rank + 1}
+        </div>
+    {/if}
 </div>
 
 <style>
     .container {
+        position: relative;
+
         width: 100%;
         height: 100%;
     }
@@ -185,6 +211,30 @@
         z-index: 1;
 
         width: 100%;
+    }
+
+    .info {
+        position: absolute;
+        z-index: 3;
+
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .info {
+            font-size: 0.8em;
+        }
+    }
+
+    .fileDisplay {
+        bottom: 1%;
+        right: 2%;
+    }
+
+    .rankDisplay {
+        top: 0;
+        left: 1%;
     }
 
     .legalMoveDot {
