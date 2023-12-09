@@ -137,9 +137,15 @@
     function handleNewFen(event) {
         const fen = event.detail;
 
-        Engine.setBoard(fen);
-        startAnalysis();
-        updateState(null);
+        try {
+            Engine.setBoard(fen);
+            console.log("Updated FEN: " + fen);
+            startAnalysis();
+            updateState(null);
+        } catch(e) {
+            // Setze das Spielbrett auf die alte Stellung zurück
+            updateState(null);
+        }
     }
 
     let allowIllegalMoves = false;
