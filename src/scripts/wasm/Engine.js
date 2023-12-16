@@ -442,7 +442,7 @@ export function startAnalysis(updateCallback) {
     if(isAnalysisRunning)
         return;
 
-    const callbackWrapper = async () => {
+    const callbackWrapper = () => {
         const data = JSON.parse(exportedFunctions.getAnalysisData());
 
         const variations = [];

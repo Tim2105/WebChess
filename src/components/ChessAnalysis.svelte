@@ -54,7 +54,7 @@
         });
 
         updateState(null);
-        startAnalysis();
+        initAnalysis();
     });
 
     onDestroy(() => {
@@ -62,7 +62,7 @@
             engineWorker.terminate();
     });
 
-    function startAnalysis() {
+    function initAnalysis() {
         // Terminiere den alten Worker
         if(engineWorker)
             engineWorker.terminate();
@@ -127,7 +127,7 @@
 
         try {
             Engine.makeMove(move);
-            startAnalysis();
+            initAnalysis();
             updateState(move);
         } catch(e) {
             console.error(e);
@@ -139,8 +139,7 @@
 
         try {
             Engine.setBoard(fen);
-            console.log("Updated FEN: " + fen);
-            startAnalysis();
+            initAnalysis();
             updateState(null);
         } catch(e) {
             // Setze das Spielbrett auf die alte Stellung zurück

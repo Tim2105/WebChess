@@ -68,18 +68,26 @@ function handleSearch(time) {
 onmessage = (msg) => {
     msg = msg.data;
 
-    if(msg.type === 'set')
-        handleSet(msg.data);
-    else if(msg.type === 'move')
-        handleMove(msg.data);
-    else if(msg.type === 'search')
-        handleSearch(msg.data);
-    else if(msg.type === 'initPlay')
-        handleInitPlay();
-    else if(msg.type === 'startAnalysis')
-        handleStartAnalysis();
-    else if(msg.type === 'stopAnalysis')
-        handleStopAnalysis();
+    switch(msg.type) {
+        case 'set':
+            handleSet(msg.data);
+            break;
+        case 'move':
+            handleMove(msg.data);
+            break;
+        case 'search':
+            handleSearch(msg.data);
+            break;
+        case 'initPlay':
+            handleInitPlay();
+            break;
+        case 'startAnalysis':
+            handleStartAnalysis();
+            break;
+        case 'stopAnalysis':
+            handleStopAnalysis();
+            break;
+    }
 }
 
 self.postMessage({

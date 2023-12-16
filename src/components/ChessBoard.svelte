@@ -161,6 +161,10 @@
         if(showPromotionDialog)
             return;
 
+        // Verwerfe das Event, wenn ein Eingabefeld fokussiert ist
+        if(document.activeElement.tagName === 'INPUT')
+            return;
+
         if(event.key === 'ArrowDown')
             focusSquareBelow();
         else if(event.key === 'ArrowUp')

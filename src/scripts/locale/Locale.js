@@ -77,8 +77,7 @@ export const translations = {
         'text.loadFen': 'Load FEN',
         'text.noMove': 'No move',
         'text.analysisExplanationHeader':
-        `The analysis is done by a custom chess engine, written in C++ (from scratch) and compiled to WebAssembly.
-        During its search, the engine collects various information, most of which is displayed here.
+        `A quick explanation of the terminology used in the analysis panel:
         `,
         'text.analysisExplanationScore':
         `The score is the evaluation of the current position in pawn units.
@@ -130,8 +129,7 @@ export const translations = {
         'text.loadFen': 'FEN laden',
         'text.noMove': 'Kein Zug',
         'text.analysisExplanationHeader':
-        `Die Analyse wird von einer eigenen Schachengine durchgeführt, die (von Grund auf) in C++ geschrieben und in WebAssembly kompiliert wurde.
-        Während der Suche sammelt die Engine verschiedene Informationen, von denen die meisten hier angezeigt werden.
+        `Eine kurze Erklärung der Begiffe, die in der Analyse verwendet werden:
         `,
         'text.analysisExplanationScore':
         `Die Bewertung ist die Evaluation der aktuellen Stellung in Bauerneinheiten.
@@ -183,8 +181,7 @@ export const translations = {
         'text.loadFen': 'Charger FEN',
         'text.noMove': 'Pas de coup',
         'text.analysisExplanationHeader':
-        `L'analyse est effectuée par un moteur d'échecs personnalisé, écrit en C++ (à partir de zéro) et compilé en WebAssembly.
-        Pendant sa recherche, le moteur collecte diverses informations, dont la plupart sont affichées ici.
+        `Une brève explication de la terminologie utilisée dans le panneau d'analyse:
         `,
         'text.analysisExplanationScore':
         `L'évaluation est l'évaluation de la position actuelle en unités de pions.
